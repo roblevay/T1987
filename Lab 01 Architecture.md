@@ -97,7 +97,8 @@ JOIN sys.dm_exec_sessions AS s ON s.session_id = wt.session_id AND s.is_user_pro
 SELECT * FROM sys.dm_os_waiting_tasks
 ORDER BY wait_duration_ms DESC--All processes, 
 ```
-- Note that in the first query, with only user processes, the wait types should be **WAITFOR** as in the query and **LCK_M_S**. In the second query, around 10-15 bacground queries appear above the lock. That is normal. Close the query windows
+- Note that in the first query, with only user processes, the wait types should be **WAITFOR** as in the query and **LCK_M_S**. In the second query, around 10-15 bacground queries appear above the lock. That is normal.
+- Close the query windows
 
 **Step 1: CXPACKET och CXCONSUMER**
 - From Configuration Manager, restart your server and connect to your server in Management Studio
