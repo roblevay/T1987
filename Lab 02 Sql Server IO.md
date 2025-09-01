@@ -292,3 +292,32 @@ Here is an explanation of the values on the left. You will get values for **Read
   → Shows **single-queue random access performance**, typical for databases or OS background operations.
 
 
+## Example CrystalDiskMark Results
+
+![CrystalDiskMark Benchmark](f45fbed0-b0d3-42ed-8dad-006ebb507754.png)
+
+### Interpretation
+
+- **SEQ1M Q8T1: 213.7 MB/s Read / 172.6 MB/s Write**  
+  High sequential performance, showing the disk can transfer large files at ~200 MB/s.  
+  → This is typical for a SATA HDD or a lower-end SSD.
+
+- **SEQ1M Q1T1: 215.0 MB/s Read / 171.1 MB/s Write**  
+  Single-threaded sequential speed is almost the same as multi-queue, which is expected.  
+  → Everyday tasks like copying files will run at ~200 MB/s.
+
+- **RND4K Q32T1: 17.8 MB/s Read / 14.8 MB/s Write**  
+  Random small-block performance with a deep queue.  
+  → Much lower than sequential, which is normal. Shows how the disk handles many small operations at once.
+
+- **RND4K Q1T1: 17.6 MB/s Read / 3.9 MB/s Write**  
+  Random small-block performance with a single queue.  
+  → Write speed here is the weakest (3–4 MB/s). This is the limiting factor for workloads like databases or lots of small file updates.
+
+### Overall Assessment
+- The drive performs well for **sequential transfers** (~200 MB/s), which means copying and moving large files is reasonably fast.  
+- **Random writes at Q1T1 are slow**, which is common for mechanical hard drives or entry-level SSDs without DRAM cache.  
+- For general use (Windows, Office, browsing, media), this performance is acceptable.  
+- For heavy multitasking or database workloads, performance would feel much slower compared to a modern NVMe SSD.
+
+
