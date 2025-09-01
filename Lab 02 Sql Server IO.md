@@ -61,14 +61,14 @@
 
 ---
 
-## Use Case
+
 
 This test is useful to simulate a realistic workload on a disk, for example to measure performance for a database or an application that performs mixed read/write operations.
 
 
 
 
-# Exercise 3: Interpret DiskSpd
+**Step 2: Run Diskspd**
 
 This is an example of results, commented below:
 
