@@ -267,3 +267,7 @@ Avg latency: \~2.5 ms
 
 ---
 
+### Exercise 2: ChrystalDiskMark
+
+
+
