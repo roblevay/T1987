@@ -26,7 +26,7 @@ Go to:
 - Check the check box for **Processsor Affinity** for **CPU0**
 - Select **Script** and then **Script Action to New Query Window**
 - The scipt should be the following
-  ```sql
+```sql
 ALTER SERVER CONFIGURATION SET PROCESS AFFINITY CPU = 0
 GO
 ```
