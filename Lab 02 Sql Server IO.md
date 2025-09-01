@@ -193,11 +193,10 @@ This means the disk performs well for mixed workloads, but has some outliers tha
 - **Test file:** 50 MB  
 
 👉 This is a short stress test simulating a database-like workload.
-
+```
 ---
 
 ## Step 2: CPU Usage
-```
 
 avg. CPU usage: \~4% (mostly idle)
 
