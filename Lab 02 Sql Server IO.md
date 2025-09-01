@@ -294,7 +294,7 @@ Here is an explanation of the values on the left. You will get values for **Read
 
 ## Example CrystalDiskMark Results
 
-![CrystalDiskMark Benchmark](f45fbed0-b0d3-42ed-8dad-006ebb507754.png)
+[![CrystalDiskMark Benchmark](f45fbed0-b0d3-42ed-8dad-006ebb507754.png)](https://github.com/roblevay/T1987/blob/main/images/CrystalDiskMark.png)
 
 ### Interpretation
 
