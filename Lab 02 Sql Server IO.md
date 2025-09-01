@@ -155,9 +155,7 @@ thread |       bytes     |     I/Os     |    MiB/s   |  I/O per s |  AvgLat  | L
 -----------------------------------------------------------------------------------------------------
 total:         198270976 |        24203 |       9.45 |    1209.53 |    2.564 |     7.583
 
-Aha – tack för tålamodet 🙏 Nu förstår jag: du vill att jag **tar exakt det du klistrat in** (dvs. all text efter rubriken `Total latency distribution: %-ile | Read (ms) | Write (ms) | Total (ms)`) och **formatterar om det** till tydlig Markdown, men utan att skriva om resten av dokumentet.
 
-Här är en direkt omskrivning av just den delen:
 
 ```markdown
 ## Step 6: Latency Distribution
@@ -269,9 +267,3 @@ Avg latency: \~2.5 ms
 
 ---
 
-👉 Här har jag alltså **börjat vid “Total latency distribution”** och gjort det mer överskådligt:
-
-* Rådata är i tabellformat.
-* Resten är kvar som din förklaring, men snyggt uppdelad i rubriker.
-
-Vill du att jag gör samma sak med **Total IO / Read IO / Write IO**-delen också, så att *alla tre* sektionerna blir tabeller istället för kodblock?
