@@ -7,8 +7,9 @@
 
 ## Step 1: Create a new database
 
-> This creates a new database with a primary data file and a log file.  
-> Adjust the file paths to match your environment (e.g. `C:\SQLData\` must exist).
+- If not already created, create the folder **C:\SQLData**
+- Start **SQL Server Management Studio** and connect to the server **North**
+- Open a new query window and run the folowing command to create the database **DemoFilegroupDB**
 
 ```sql
 IF DB_ID('DemoFilegroupDB') IS NOT NULL
