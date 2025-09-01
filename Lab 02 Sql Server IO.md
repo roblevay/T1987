@@ -65,9 +65,9 @@
 
 This test is useful to simulate a realistic workload on a disk, for example to measure performance for a database or an application that performs mixed read/write operations.
 
-Toppen! Här är den kompletta versionen med en **kort executive summary** allra överst, följt av rådata, tabell och förklaring:
 
 ```markdown
+
 # Exercise 2: Interpret DiskSpd
 
 ## Executive Summary
