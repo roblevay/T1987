@@ -146,39 +146,102 @@ Max     |   54.102  |   54.818   |   54.818
 
 ---
 
-## Interpreting the Results
+Absolut! Då gör jag en ny version som är **mindre tekniskt tung** och mer **pedagogiskt uppdelad** – en slags ”guide till hur man läser DiskSpd-resultatet”. Du får rådata + förklaring sida vid sida.
 
-### Test Setup
+```markdown
+# Exercise 2: Interpret DiskSpd
+
+## Executive Summary
+The test shows about **4,000 IOPS** and **~31 MB/s throughput**.  
+Average latency is low (1–3 ms), but there are **occasional spikes up to ~50 ms**.  
+This means the disk performs well for mixed workloads, but has some outliers that can affect very latency-sensitive applications.
+
+---
+
+## Step 1: Test Setup
 - **Duration:** ~20 seconds  
 - **Threads:** 4  
-- **Workload:** 8 KB random I/O, 30% writes / 70% reads  
-- **File:** 50 MB test file  
+- **Workload:** Random 8 KB operations, 30% writes / 70% reads  
+- **Test file:** 50 MB  
 
-### CPU Usage
-- Low CPU usage (2–5%).  
-- Most cycles spent idle → workload is **I/O-bound**.  
+👉 This is a short stress test simulating a database-like workload.
 
-### Total I/O
-- Throughput ~31.5 MiB/s across 4 threads.  
-- ~4,000 IOPS sustained.  
-- Average latency ~2 ms.  
-- Even thread distribution → no major imbalance.  
+---
 
-### Read vs Write Performance
-- **Reads:** Faster and steadier (~1.7 ms avg).  
-- **Writes:** Slower (~2.5 ms avg) and more variable.  
+## Step 2: CPU Usage
+```
 
-### Latency Distribution
-- Majority of ops complete in <1 ms.  
-- 95th percentile: reads ~0.5 ms, writes ~2.7 ms.  
-- 99th percentile shows spikes up to ~37–54 ms → occasional long delays.  
+avg. CPU usage: \~4% (mostly idle)
 
-### Summary
-The disk delivers **~4,000 IOPS** with low average latency and a healthy read/write mix.  
-However, **tail latency spikes** (tens of ms) appear under load, which could impact latency-sensitive applications (e.g. databases).  
-Overall, performance is solid for mixed workloads, but monitoring is advised if strict latency SLAs are required.
+```
+- CPU usage is very low → the test is **limited by disk speed**, not by processor power.  
+- This is expected in an I/O benchmark.
+
+---
+
+## Step 3: Total I/O
+```
+
+Throughput: \~31.5 MiB/s
+IOPS: \~4,033 per second
+Average latency: \~2 ms
+
+```
+- **Throughput** is how much data was read/written per second.  
+- **IOPS** is how many individual operations were completed per second.  
+- **Latency** shows how long each operation took on average.  
+- Result: The disk handles ~4,000 small I/Os every second, each taking ~2 ms.
+
+---
+
+## Step 4: Read I/O
+```
+
+Throughput: \~22 MiB/s
+IOPS: \~2,824 / sec
+Avg latency: \~1.7 ms
+
+```
+- Reads are **fast and efficient**.  
+- Latency is lower than writes, which is typical.
+
+---
+
+## Step 5: Write I/O
+```
+
+Throughput: \~9.5 MiB/s
+IOPS: \~1,210 / sec
+Avg latency: \~2.5 ms
+
+```
+- Writes are **slower and more variable** than reads.  
+- This matches most storage behavior: writes are harder work for disks.
+
+---
+
+## Step 6: Latency Distribution
+```
+
+Median (50th percentile): 0.2–1 ms
+95th percentile: 0.5 ms (reads), 2.7 ms (writes)
+99th percentile: 37–38 ms
+Max: \~55 ms
+
+```
+- **Most operations are very quick** (well under 1 ms).  
+- **Some operations take much longer** (tens of ms).  
+- These rare outliers are called **tail latency** and may cause slow responses in sensitive systems.
+
+---
+
+## Final Interpretation
+- The disk is capable of **~4,000 small random I/Os per second** with low average latency.  
+- **Reads are faster** than writes, as expected.  
+- **Occasional long delays** show up in the 99th percentile → this is normal but important if you need very predictable performance.  
+- Overall: **Good performance for general workloads**, but not perfectly consistent.
 ```
 
 ---
 
-Vill du att jag gör en ännu mer **komprimerad enradig slutsats** (typ “≈4k IOPS, 2 ms latency, risk för spikes upp till 50 ms”) för att använda i tabeller eller presentationsslides?
+
