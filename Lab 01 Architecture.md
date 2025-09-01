@@ -16,6 +16,22 @@ Go to:
 
 - In the query window, run  -- SQL Server NUMA Node information  (Query 12). With alla likelihood there will be only one node (one row). You will see the number of logical processors, cpu_count
 
+**Step 3: Processor affinity**
+- Open **SQL Server Management Studio (SSMS)**.
+- Connect to your default instance (`North`).
+- Right-click on your instance name in Object Explorer and select **Properties**.
+- Click on the **Processors** tab
+- Verify that the number of nodes and processors are the same as observed in step 2 above
+- Deselect the **Automatically set processor affinity mask for all processors
+- Check the check box for **Processsor Affinity** for **CPU0**
+- Select **Script** and then **Script Action to New Query Window**
+- The scipt should be the following
+  ```sql
+ALTER SERVER CONFIGURATION SET PROCESS AFFINITY CPU = 0
+GO
+```
+
+
 
 ### Exercise 1: Identify Version and Edition (20 min)
 
