@@ -269,5 +269,26 @@ Avg latency: \~2.5 ms
 
 ### Exercise 2: ChrystalDiskMark
 
+- Download **CrystalDiskMark9_0_1.exe** from **https://github.com/roblevay/T1987**
+- Install the application using default settings
+- In the **Admin** program, click **All**. Wait for about 5 minutes for the program to run.
+
+Here is an explanation of the values on the left. You will get values for **Read MB/s** and **Write MB/s** in each box.
+
+- **SEQ1M Q8T1**  
+  Sequential read/write with **1 MB block size**, queue depth 8, 1 thread.  
+  → Good for measuring **maximum transfer speed** under parallel load.
+
+- **SEQ1M Q1T1**  
+  Sequential read/write with **1 MB block size**, queue depth 1, 1 thread.  
+  → Represents **single-threaded sequential performance**, closer to everyday file copy scenarios.
+
+- **RND4K Q32T1**  
+  Random read/write with **4 KB block size**, queue depth 32, 1 thread.  
+  → Simulates **many outstanding small I/Os**, similar to a server or heavy multitasking.
+
+- **RND4K Q1T1**  
+  Random read/write with **4 KB block size**, queue depth 1, 1 thread.  
+  → Shows **single-queue random access performance**, typical for databases or OS background operations.
 
 
