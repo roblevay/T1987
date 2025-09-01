@@ -159,16 +159,5 @@ ALTER DATABASE DemoFilegroupDB MODIFY FILEGROUP [PRIMARY] DEFAULT;
 
 ---
 
-## Discussion
 
-* What is the difference between PRIMARY and the new filegroup?
-* Why might you want to spread tables and indexes across different filegroups?
-* How can filegroups help with performance and administration (e.g. backup/restore)?
-
-```
-
----
-
-Vill du att jag också gör en **”cleanup”-sektion** sist i markdownen, så att studenter enkelt kan återställa miljön genom att ta bort databasen efter övningen?
-```
 
