@@ -139,3 +139,4 @@ SELECT * FROM sys.dm_os_waiting_tasks
 ORDER BY wait_duration_ms DESC--All processes, 
 ```
 - You should be able to find CXPACKET waits. If not, run the queries again. Query1 and Query2 should take around 30 seconds to run, be sure to run Query 3 before too much time has passed!
+- Close all windows
