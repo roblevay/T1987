@@ -82,13 +82,13 @@ ROLLBACK;  -- Rulla tillbaka
 ```
 
 - Open a new query window in SSMS, Query 2
-- - Run this query:
+- Run this query:
 ```sql
 SELECT * FROM tempdb.dbo.WaitLab WITH (INDEX(1)) WHERE id = 500; -- behöver S, blockeras av X
 ```
 
 - Open a new query window in SSMS, Query 3 
-- - Run this query:
+- Run this query:
 ```sql
 SELECT wt.session_id, wt.blocking_session_id, wt.wait_type, wt.wait_duration_ms   
 FROM sys.dm_os_waiting_tasks AS wt
@@ -102,7 +102,6 @@ ORDER BY wait_duration_ms DESC--All processes,
 
 **Step 1: CXPACKET och CXCONSUMER**
 - From Configuration Manager, restart your server and connect to your server in Management Studio
-- 
 - Open a new query window in SSMS, Query 1.
 - Run this query:
 ```sql
@@ -117,7 +116,7 @@ OPTION (MAXDOP 8, QUERYTRACEON 8649, RECOMPILE);
 ```
 
 - Open a new query window in SSMS, Query 2
-- - Run the same query:
+- Run the same query:
 ```sql
 ;WITH n AS (
   SELECT TOP (2000000) ROW_NUMBER() OVER (ORDER BY (SELECT 1)) AS rn
@@ -130,7 +129,7 @@ OPTION (MAXDOP 8, QUERYTRACEON 8649, RECOMPILE);
 ```
 
 - Open a new query window in SSMS, Query 3 
-- - Run this query:
+- Run this query:
 ```sql
 SELECT wt.session_id, wt.blocking_session_id, wt.wait_type, wt.wait_duration_ms   
 FROM sys.dm_os_waiting_tasks AS wt
