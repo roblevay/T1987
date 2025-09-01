@@ -66,87 +66,113 @@
 This test is useful to simulate a realistic workload on a disk, for example to measure performance for a database or an application that performs mixed read/write operations.
 
 
-```markdown
 
-# Exercise 2: Interpret DiskSpd
 
-## Executive Summary
-The test sustained about **4,000 IOPS** with a throughput of ~31.5 MiB/s.  
-Average latency was low (1–3 ms), but there were **occasional spikes up to 50 ms**.  
-This indicates solid performance for typical workloads, with some variability in tail latency.
+# Exercise 3: Interpret DiskSpd
 
----
+This is an example of results, commented below:
 
-## Raw Results (Timespan 1)
+C:\Windows\system32>C:\diskspd\Diskspd.exe -b8K -d20 -h -L -o2 -t4 -r -w30 -c50M c:\diskspd\io.dat
 
-**Actual test time:** 20.01s  
-**Thread count:** 4  
+Command Line: C:\diskspd\Diskspd.exe -b8K -d20 -h -L -o2 -t4 -r -w30 -c50M c:\diskspd\io.dat
 
-### CPU Usage
-```
+Input parameters:
 
-## Core | CPU |  Usage |  User  | Kernel |  Idle
+        timespan:   1
+        -------------
+        duration: 20s
+        warm up time: 5s
+        cool down time: 0s
+        measuring latency
+        random seed: 0
+        path: 'c:\diskspd\io.dat'
+                think time: 0ms
+                burst size: 0
+                software cache disabled
+                hardware write cache disabled, writethrough on
+                performing mix test (read/write ratio: 70/30)
+                block size: 8KiB
+                using random I/O (alignment: 8KiB)
+                number of outstanding I/O operations per thread: 2
+                threads per file: 4
+                using I/O Completion Ports
+                IO priority: normal
 
-```
-0|    0|   5.15%|   1.09%|   4.06%|  94.85%
-0|    1|   2.73%|   0.78%|   1.95%|  97.27%
-```
+System information:
 
----
+        computer name: north
+        start time: 2025/09/01 11:59:03 UTC
 
-```
-   avg.|   3.94%|   0.94%|   3.01%|  96.06%
-```
+        cpu count:              2
+        core count:             1
+        group count:            1
+        node count:             1
+        socket count:           1
+        heterogeneous cores:    n
 
-```
+        active power scheme:    High performance (8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c)
 
-### Total I/O
-```
+Results for timespan 1:
+*******************************************************************************
 
-total: 661135360 bytes | 80705 I/Os | 31.51 MiB/s | 4033.18 IOPS | AvgLat 1.98 ms | StdDev 7.54 ms
+actual test time:       20.01s
+thread count:           4
 
-```
+Core | CPU |  Usage |  User  | Kernel |  Idle
+-----------------------------------------------
+    0|    0|   5.15%|   1.09%|   4.06%|  94.85%
+    0|    1|   2.73%|   0.78%|   1.95%|  97.27%
+-----------------------------------------------
+       avg.|   3.94%|   0.94%|   3.01%|  96.06%
 
-### Read I/O
-```
+Total IO
+thread |       bytes     |     I/Os     |    MiB/s   |  I/O per s |  AvgLat  | LatStdDev |  file
+-----------------------------------------------------------------------------------------------------
+     0 |       165126144 |        20157 |       7.87 |    1007.33 |    1.982 |     7.540 | c:\diskspd\io.dat (50MiB)
+     1 |       163807232 |        19996 |       7.81 |     999.29 |    1.998 |     7.577 | c:\diskspd\io.dat (50MiB)
+     2 |       166649856 |        20343 |       7.94 |    1016.63 |    1.964 |     7.504 | c:\diskspd\io.dat (50MiB)
+     3 |       165552128 |        20209 |       7.89 |    1009.93 |    1.977 |     7.532 | c:\diskspd\io.dat (50MiB)
+-----------------------------------------------------------------------------------------------------
+total:         661135360 |        80705 |      31.51 |    4033.18 |    1.981 |     7.538
 
-total: 462864384 bytes | 56502 I/Os | 22.06 MiB/s | 2823.65 IOPS | AvgLat 1.73 ms | StdDev 7.51 ms
+Read IO
+thread |       bytes     |     I/Os     |    MiB/s   |  I/O per s |  AvgLat  | LatStdDev |  file
+-----------------------------------------------------------------------------------------------------
+     0 |       115212288 |        14064 |       5.49 |     702.84 |    1.755 |     7.565 | c:\diskspd\io.dat (50MiB)
+     1 |       114442240 |        13970 |       5.45 |     698.14 |    1.681 |     7.394 | c:\diskspd\io.dat (50MiB)
+     2 |       117088256 |        14293 |       5.58 |     714.28 |    1.755 |     7.577 | c:\diskspd\io.dat (50MiB)
+     3 |       116121600 |        14175 |       5.53 |     708.39 |    1.732 |     7.482 | c:\diskspd\io.dat (50MiB)
+-----------------------------------------------------------------------------------------------------
+total:         462864384 |        56502 |      22.06 |    2823.65 |    1.731 |     7.505
 
-```
+Write IO
+thread |       bytes     |     I/Os     |    MiB/s   |  I/O per s |  AvgLat  | LatStdDev |  file
+-----------------------------------------------------------------------------------------------------
+     0 |        49913856 |         6093 |       2.38 |     304.49 |    2.508 |     7.456 | c:\diskspd\io.dat (50MiB)
+     1 |        49364992 |         6026 |       2.35 |     301.15 |    2.735 |     7.936 | c:\diskspd\io.dat (50MiB)
+     2 |        49561600 |         6050 |       2.36 |     302.35 |    2.460 |     7.307 | c:\diskspd\io.dat (50MiB)
+     3 |        49430528 |         6034 |       2.36 |     301.55 |    2.555 |     7.618 | c:\diskspd\io.dat (50MiB)
+-----------------------------------------------------------------------------------------------------
+total:         198270976 |        24203 |       9.45 |    1209.53 |    2.564 |     7.583
 
-### Write I/O
-```
-
-total: 198270976 bytes | 24203 I/Os |  9.45 MiB/s | 1209.53 IOPS | AvgLat 2.56 ms | StdDev 7.58 ms
-
-```
-
-### Latency Distribution
-```
-
-## Percentile | Read (ms) | Write (ms) | Total (ms)
-
-50th    |    0.221  |    0.965   |    0.252
-95th    |    0.495  |    2.693   |    1.508
-99th    |   37.420  |   38.199   |   37.753
-Max     |   54.102  |   54.818   |   54.818
-
-```
-
----
-
-## DiskSpd Results Summary
-
-| Metric          | Reads            | Writes           | Total            |
-|-----------------|------------------|------------------|------------------|
-| **Throughput**  | ~22.1 MiB/s      | ~9.5 MiB/s       | ~31.5 MiB/s      |
-| **IOPS**        | ~2,824 / second  | ~1,210 / second  | ~4,033 / second  |
-| **Avg. Latency**| ~1.7 ms          | ~2.5 ms          | ~2.0 ms          |
-| **Std. Dev.**   | ~7.5 ms          | ~7.6 ms          | ~7.5 ms          |
-
----
-
-Absolut! Då gör jag en ny version som är **mindre tekniskt tung** och mer **pedagogiskt uppdelad** – en slags ”guide till hur man läser DiskSpd-resultatet”. Du får rådata + förklaring sida vid sida.
+Total latency distribution:
+  %-ile |  Read (ms) | Write (ms) | Total (ms)
+----------------------------------------------
+    min |      0.029 |      0.760 |      0.029
+   25th |      0.194 |      0.913 |      0.206
+   50th |      0.221 |      0.965 |      0.252
+   75th |      0.259 |      1.047 |      0.915
+   90th |      0.323 |      1.260 |      1.053
+   95th |      0.495 |      2.693 |      1.508
+   99th |     37.420 |     38.199 |     37.753
+3-nines |     52.723 |     53.486 |     53.008
+4-nines |     53.297 |     54.368 |     53.876
+5-nines |     54.102 |     54.818 |     54.818
+6-nines |     54.102 |     54.818 |     54.818
+7-nines |     54.102 |     54.818 |     54.818
+8-nines |     54.102 |     54.818 |     54.818
+9-nines |     54.102 |     54.818 |     54.818
+    max |     54.102 |     54.818 |     54.818
 
 ```markdown
 # Exercise 2: Interpret DiskSpd
