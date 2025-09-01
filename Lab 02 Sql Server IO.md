@@ -175,7 +175,9 @@ Total latency distribution:
     max |     54.102 |     54.818 |     54.818
 
 ```markdown
-# Exercise 2: Interpret DiskSpd
+
+
+
 
 ## Executive Summary
 The test shows about **4,000 IOPS** and **~31 MB/s throughput**.  
