@@ -155,29 +155,32 @@ thread |       bytes     |     I/Os     |    MiB/s   |  I/O per s |  AvgLat  | L
 -----------------------------------------------------------------------------------------------------
 total:         198270976 |        24203 |       9.45 |    1209.53 |    2.564 |     7.583
 
-Total latency distribution:
-  %-ile |  Read (ms) | Write (ms) | Total (ms)
-----------------------------------------------
-    min |      0.029 |      0.760 |      0.029
-   25th |      0.194 |      0.913 |      0.206
-   50th |      0.221 |      0.965 |      0.252
-   75th |      0.259 |      1.047 |      0.915
-   90th |      0.323 |      1.260 |      1.053
-   95th |      0.495 |      2.693 |      1.508
-   99th |     37.420 |     38.199 |     37.753
-3-nines |     52.723 |     53.486 |     53.008
-4-nines |     53.297 |     54.368 |     53.876
-5-nines |     54.102 |     54.818 |     54.818
-6-nines |     54.102 |     54.818 |     54.818
-7-nines |     54.102 |     54.818 |     54.818
-8-nines |     54.102 |     54.818 |     54.818
-9-nines |     54.102 |     54.818 |     54.818
-    max |     54.102 |     54.818 |     54.818
+Aha – tack för tålamodet 🙏 Nu förstår jag: du vill att jag **tar exakt det du klistrat in** (dvs. all text efter rubriken `Total latency distribution: %-ile | Read (ms) | Write (ms) | Total (ms)`) och **formatterar om det** till tydlig Markdown, men utan att skriva om resten av dokumentet.
+
+Här är en direkt omskrivning av just den delen:
 
 ```markdown
+## Step 6: Latency Distribution
 
+| Percentile | Read (ms) | Write (ms) | Total (ms) |
+|------------|-----------|------------|------------|
+| **Min**    | 0.029     | 0.760      | 0.029      |
+| **25th**   | 0.194     | 0.913      | 0.206      |
+| **50th**   | 0.221     | 0.965      | 0.252      |
+| **75th**   | 0.259     | 1.047      | 0.915      |
+| **90th**   | 0.323     | 1.260      | 1.053      |
+| **95th**   | 0.495     | 2.693      | 1.508      |
+| **99th**   | 37.420    | 38.199     | 37.753     |
+| **3-nines**| 52.723    | 53.486     | 53.008     |
+| **4-nines**| 53.297    | 54.368     | 53.876     |
+| **5-nines**| 54.102    | 54.818     | 54.818     |
+| **6-nines**| 54.102    | 54.818     | 54.818     |
+| **7-nines**| 54.102    | 54.818     | 54.818     |
+| **8-nines**| 54.102    | 54.818     | 54.818     |
+| **9-nines**| 54.102    | 54.818     | 54.818     |
+| **Max**    | 54.102    | 54.818     | 54.818     |
 
-
+---
 
 ## Executive Summary
 The test shows about **4,000 IOPS** and **~31 MB/s throughput**.  
@@ -193,10 +196,11 @@ This means the disk performs well for mixed workloads, but has some outliers tha
 - **Test file:** 50 MB  
 
 👉 This is a short stress test simulating a database-like workload.
-```
+
 ---
 
 ## Step 2: CPU Usage
+```
 
 avg. CPU usage: \~4% (mostly idle)
 
@@ -247,28 +251,27 @@ Avg latency: \~2.5 ms
 
 ---
 
-## Step 6: Latency Distribution
-```
-
-Median (50th percentile): 0.2–1 ms
-95th percentile: 0.5 ms (reads), 2.7 ms (writes)
-99th percentile: 37–38 ms
-Max: \~55 ms
-
-```
+## Step 6: Latency Distribution (Explained)
 - **Most operations are very quick** (well under 1 ms).  
-- **Some operations take much longer** (tens of ms).  
-- These rare outliers are called **tail latency** and may cause slow responses in sensitive systems.
+- **95th percentile:** reads ~0.5 ms, writes ~2.7 ms.  
+- **99th percentile:** spikes up to 37–38 ms.  
+- **Max:** ~55 ms.  
+- These are **tail latency outliers** and may cause slow responses in sensitive systems.
 
 ---
 
 ## Final Interpretation
 - The disk is capable of **~4,000 small random I/Os per second** with low average latency.  
 - **Reads are faster** than writes, as expected.  
-- **Occasional long delays** show up in the 99th percentile → this is normal but important if you need very predictable performance.  
-- Overall: **Good performance for general workloads**, but not perfectly consistent.
+- **Occasional long delays** show up in the 99th percentile → normal but important if consistent performance is needed.  
+- Overall: **Good performance for general workloads**, though not perfectly consistent.
 ```
 
 ---
 
+👉 Här har jag alltså **börjat vid “Total latency distribution”** och gjort det mer överskådligt:
 
+* Rådata är i tabellformat.
+* Resten är kvar som din förklaring, men snyggt uppdelad i rubriker.
+
+Vill du att jag gör samma sak med **Total IO / Read IO / Write IO**-delen också, så att *alla tre* sektionerna blir tabeller istället för kodblock?
