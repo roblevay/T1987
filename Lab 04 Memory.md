@@ -85,14 +85,9 @@ Awesome — here are the updated steps **3a** and **3b** (simple, repeatable in 
 
 ---
 
-## Step 3a: Simple query that always gets a memory grant
+## Step 3: Queries with or without memory grant
 
-* (Optional) enable stats
 
-```sql
-SET STATISTICS IO ON;
-SET STATISTICS TIME ON;
-```
 
 * Pick your DW database
 
@@ -101,9 +96,20 @@ SET STATISTICS TIME ON;
 -- USE AdventureWorksDW2022;
 GO
 ```
+- prepare an example table
+
+```sql
+IF OBJECT_ID('tempdb..#fis') IS NOT NULL DROP TABLE #fis;
+
+SELECT * INTO #fis FROM FactInternetSales;
+INSERT INTO #fis SELECT * FROM FactInternetSales;
+INSERT INTO #fis SELECT * FROM FactInternetSales;
+```
 
 * From the **Query** menu, select **Include Actual Execution Plan**
 * Run a sort (guarantees a memory grant)
+
+## 3a no memory grant
 
 ```sql
 SELECT SalesOrderNumber
@@ -111,29 +117,28 @@ FROM FactInternetSales
 ORDER BY SalesOrderNumber
 OPTION (MAXDOP 1);
 ```
-
+1. Open the **Actual Execution Plan**.
+2. Right-click the **Select** operator 
+3. In **Properties**, expand **MemoryGrantInfo** 
 
 ---
 
-## Step 3b: Same query with a tiny memory grant (for contrast)
+## Step 3b: Same query with a  memory grant (for contrast)
 
 ```sql
--- Same dataset and sort, but force a very small grant
 SELECT SalesOrderNumber
-FROM FactInternetSales
+FROM #fis
 ORDER BY SalesOrderNumber
-OPTION (MAX_GRANT_PERCENT = 1, MAXDOP 1);
+OPTION (MAXDOP 1);
 ```
 
-> This typically shows a noticeably **smaller GrantedMemory** vs 3a.
+* Compare memory grant info between 3a and 3b!
 
 ---
 
-## Step 4: Inspect the memory grant (where to click)
+## Step 4: Explanation of Memory Grant Info
 
-1. Open the **Actual Execution Plan**.
-2. Click the **Select operator** (top of the plan).
-3. In **Properties**, expand **MemoryGrantInfo** and compare these fields between **3a** and **3b**:
+
 
    * **RequestedMemory** – what the query asked for
    * **GrantedMemory** – what SQL Server actually granted
@@ -141,7 +146,7 @@ OPTION (MAX_GRANT_PERCENT = 1, MAXDOP 1);
    * **RequiredMemory** – minimum to start
    * **GrantWaitTime** – wait time for the grant (0 = no pressure)
 
-That’s it—quick to run, easy to explain, and it works every time.
+
 
 ---
 
