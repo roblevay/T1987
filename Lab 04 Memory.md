@@ -211,7 +211,7 @@ ORDER BY pages DESC;
 * Restore memory setting (example: 4096 MB or your standard)
 
 ```sql
-EXEC sp_configure 'max server memory (MB)', 4096;
+EXEC sp_configure 'max server memory (MB)', 2147483647;
 RECONFIGURE;
 ```
 
