@@ -1,13 +1,5 @@
 # Exercise 1: Memory examination
 
-
-
-Perfect! I’ll restructure the lab into the style you suggested: clear **Step headings**, short **bullet explanations in English**, and **code blocks** right below. Here’s the reformatted version:
-
----
-
-# SQL Server 2019 Lab – Memory in Practice
-
 ## Step 1: Memory configuration
 
 * Check memory configuration
