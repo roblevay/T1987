@@ -2,6 +2,9 @@
 
 ## Step 1: Memory configuration
 
+- Start SQL Server Management Studio
+- Connect to the Server North and open a query window
+  
 * Check memory configuration
 
 ```sql
