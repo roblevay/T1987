@@ -146,6 +146,15 @@ OPTION (MAXDOP 1);
    * **RequiredMemory** – minimum to start
    * **GrantWaitTime** – wait time for the grant (0 = no pressure)
 
+Here’s a simple way to think about query memory in SQL Server.
+
+When a query needs workspace (for things like **sorts** or **hash joins**), the optimizer estimates how much it will need and asks for it. That estimate shows up as **RequestedMemory**. SQL Server then checks what’s available and decides how much to actually give the query; that’s **GrantedMemory**. If there isn’t enough free memory to satisfy the request, the query may have to **wait**—the time it waits is **GrantWaitTime**. A wait of 0 means there was no memory pressure.
+
+There’s also a floor: **RequiredMemory** is the minimum needed to even start. If SQL Server can’t grant at least this amount, the query won’t run.
+
+During execution, SQL Server tracks what the query actually uses at peak. That’s **MaxUsedMemory**. It’s normal for **MaxUsedMemory** to be lower than **GrantedMemory**—the grant includes safety headroom to avoid running out mid-operation. If the grant is too small for the workload, the query may spill to tempdb and slow down; if it’s larger than needed, it’s safe but ties up memory briefly.
+
+In short: *Request* (estimate), *Grant* (allocation), *Required* (minimum), *MaxUsed* (real peak), and *GrantWaitTime* (pressure signal).
 
 
 ---
