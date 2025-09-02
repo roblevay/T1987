@@ -102,6 +102,7 @@ SET STATISTICS TIME ON;
 GO
 ```
 
+* From the **Query** menu, select **Include Actual Execution Plan**
 * Run a sort (guarantees a memory grant)
 
 ```sql
@@ -111,7 +112,6 @@ ORDER BY SalesOrderNumber
 OPTION (MAXDOP 1);
 ```
 
-> Make sure **Include Actual Execution Plan** (Ctrl+M) is ON in SSMS.
 
 ---
 
