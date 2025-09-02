@@ -6,10 +6,12 @@
 
 
 
--- 1) Check memory configuration
+- Check memory configuration
+```sql
 EXEC sp_configure 'show advanced options', 1;
 RECONFIGURE;
 EXEC sp_configure 'max server memory (MB)';
+```
 
 -- 2) Lower memory use
 EXEC sp_configure 'max server memory (MB)', 1024;
