@@ -47,6 +47,18 @@ SELECT
 FROM sys.dm_os_process_memory;
 ```
 
+| Column                              | Example Value | Explanation                                                                            |
+| ----------------------------------- | ------------- | -------------------------------------------------------------------------------------- |
+| **physical\_memory\_in\_use\_kb**   | 936,372       | Current RAM used by SQL Server process (\~915 MB).                                     |
+| **large\_page\_allocations\_kb**    | 0             | Memory allocated with large pages (2 MB). Usually 0 unless specially configured.       |
+| **locked\_page\_allocations\_kb**   | 0             | Memory locked in RAM (not pageable). Requires “Lock pages in memory” privilege.        |
+| **page\_fault\_count**              | 285,727       | Number of times data was not in the working set and had to be fetched. Some is normal. |
+| **memory\_utilization\_percentage** | 100           | Percentage of committed memory currently in use. 100% is normal.                       |
+| **available\_commit\_limit\_kb**    | 15,338,232    | Memory still available to allocate (\~14.6 GB). Higher = plenty of headroom.           |
+| **process\_physical\_memory\_low**  | 0             | Flag (1 = low). 0 means no physical memory pressure.                                   |
+| **process\_virtual\_memory\_low**   | 0             | Flag (1 = low). 0 means no virtual memory pressure.                                    |
+
+
 * Top memory clerks (works in 2019 & 2022)
 
 ```sql
