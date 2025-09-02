@@ -81,102 +81,67 @@ ORDER BY mc.pages_kb DESC;
 
 ---
 
-## Step 3: Run an aggregation in AdventureWorksDW
+Awesome — here are the updated steps **3a** and **3b** (simple, repeatable in SQL Server 2019 & 2022), plus the inspection step.
 
-> Use the DW name that matches your install and uncomment one line:
->
-> * `USE AdventureWorksDW2019;`  or
-> * `USE AdventureWorksDW2022;`
+---
 
-* Enable statistics
+## Step 3a: Simple query that always gets a memory grant
+
+* (Optional) enable stats
 
 ```sql
 SET STATISTICS IO ON;
 SET STATISTICS TIME ON;
 ```
 
-* Run a standard query
+* Pick your DW database
 
 ```sql
 -- USE AdventureWorksDW2019;
 -- USE AdventureWorksDW2022;
 GO
-SELECT 
-    sc.EnglishProductSubcategoryName,
-    t.SalesTerritoryCountry,
-    SUM(f.SalesAmount) AS TotalSales
-FROM FactInternetSales AS f
-JOIN DimProduct AS p              ON f.ProductKey = p.ProductKey
-JOIN DimProductSubcategory AS sc  ON p.ProductSubcategoryKey = sc.ProductSubcategoryKey
-JOIN DimCustomer AS c             ON f.CustomerKey = c.CustomerKey
-JOIN DimGeography AS g            ON c.GeographyKey = g.GeographyKey
-JOIN DimSalesTerritory AS t       ON g.SalesTerritoryKey = t.SalesTerritoryKey
-GROUP BY sc.EnglishProductSubcategoryName, t.SalesTerritoryCountry
-ORDER BY SUM(f.SalesAmount) DESC;
 ```
 
-* Force a low memory grant to increase chance of spilling to tempdb
+* Run a sort (guarantees a memory grant)
 
 ```sql
-SELECT 
-    sc.EnglishProductSubcategoryName,
-    t.SalesTerritoryCountry,
-    SUM(f.SalesAmount) AS TotalSales
-FROM FactInternetSales AS f
-JOIN DimProduct AS p              ON f.ProductKey = p.ProductKey
-JOIN DimProductSubcategory AS sc  ON p.ProductSubcategoryKey = sc.ProductSubcategoryKey
-JOIN DimCustomer AS c             ON f.CustomerKey = c.CustomerKey
-JOIN DimGeography AS g            ON c.GeographyKey = g.GeographyKey
-JOIN DimSalesTerritory AS t       ON g.SalesTerritoryKey = t.SalesTerritoryKey
-GROUP BY sc.EnglishProductSubcategoryName, t.SalesTerritoryCountry
-ORDER BY SUM(f.SalesAmount) DESC
-OPTION (HASH GROUP, MAX_GRANT_PERCENT = 1);  -- supported in 2019 & 2022
+SELECT SalesOrderNumber
+FROM FactInternetSales
+ORDER BY SalesOrderNumber
+OPTION (MAXDOP 1);
 ```
+
+> Make sure **Include Actual Execution Plan** (Ctrl+M) is ON in SSMS.
 
 ---
 
-## Step 4: Inspect memory grants and spills
-
-* Current/recent memory grants
+## Step 3b: Same query with a tiny memory grant (for contrast)
 
 ```sql
-SELECT 
-  DB_NAME(rs.database_id) AS dbname,
-  mg.request_time, 
-  mg.grant_time,
-  mg.requested_memory_kb, 
-  mg.granted_memory_kb, 
-  mg.required_memory_kb,
-  mg.max_used_memory_kb,
-  rs.status, 
-  rs.command, 
-  rs.wait_type
-FROM sys.dm_exec_query_memory_grants AS mg
-JOIN sys.dm_exec_requests AS rs
-  ON mg.session_id = rs.session_id
-ORDER BY mg.request_time DESC;
+-- Same dataset and sort, but force a very small grant
+SELECT SalesOrderNumber
+FROM FactInternetSales
+ORDER BY SalesOrderNumber
+OPTION (MAX_GRANT_PERCENT = 1, MAXDOP 1);
 ```
 
-* Tempdb usage (query the DMV in tempdb context)
+> This typically shows a noticeably **smaller GrantedMemory** vs 3a.
 
-```sql
-SELECT * 
-FROM tempdb.sys.dm_db_file_space_usage;
-```
+---
 
-* Find plans that reported spills
+## Step 4: Inspect the memory grant (where to click)
 
-```sql
-SELECT TOP (20)
-  qs.last_execution_time,
-  qs.total_worker_time, 
-  qs.total_elapsed_time,
-  qp.query_plan
-FROM sys.dm_exec_query_stats AS qs
-CROSS APPLY sys.dm_exec_query_plan(qs.plan_handle) AS qp
-WHERE CAST(qp.query_plan AS NVARCHAR(MAX)) LIKE '%SpillToTempDb%'
-ORDER BY qs.last_execution_time DESC;
-```
+1. Open the **Actual Execution Plan**.
+2. Click the **Select operator** (top of the plan).
+3. In **Properties**, expand **MemoryGrantInfo** and compare these fields between **3a** and **3b**:
+
+   * **RequestedMemory** – what the query asked for
+   * **GrantedMemory** – what SQL Server actually granted
+   * **MaxUsedMemory** – what the query really used
+   * **RequiredMemory** – minimum to start
+   * **GrantWaitTime** – wait time for the grant (0 = no pressure)
+
+That’s it—quick to run, easy to explain, and it works every time.
 
 ---
 
