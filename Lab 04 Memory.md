@@ -16,7 +16,7 @@ EXEC sp_configure 'max server memory (MB)';
 * Lower memory usage
 
 ```sql
-EXEC sp_configure 'max server memory (MB)', 1024;
+EXEC sp_configure 'max server memory (MB)', 1024;--Default is 2147483647
 RECONFIGURE;
 ```
 
