@@ -109,7 +109,7 @@ INSERT INTO #fis SELECT * FROM FactInternetSales;
 * From the **Query** menu, select **Include Actual Execution Plan**
 * Run a sort (guarantees a memory grant)
 
-## 3a no memory grant
+## Step 3a: no memory grant
 
 ```sql
 SELECT SalesOrderNumber
