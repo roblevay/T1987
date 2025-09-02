@@ -28,36 +28,45 @@ DBCC DROPCLEANBUFFERS;
 DBCC FREEPROCCACHE;
 ```
 
----
+
 
 ## Step 2: Inspect memory usage
 
-* Look at process memory
+* Process memory (columns valid in 2019 & 2022)
 
 ```sql
 SELECT 
-  physical_memory_kb, 
-  committed_kb, 
-  committed_target_kb, 
-  memory_utilization_percentage
+  physical_memory_in_use_kb,
+  large_page_allocations_kb,
+  locked_page_allocations_kb,
+  page_fault_count,
+  memory_utilization_percentage,
+  available_commit_limit_kb,
+  process_physical_memory_low,
+  process_virtual_memory_low
 FROM sys.dm_os_process_memory;
 ```
 
-* Top 10 memory clerks
+* Top memory clerks (works in 2019 & 2022)
 
 ```sql
 SELECT TOP (10)
   mc.type, 
   mc.memory_node_id, 
-  pages_kb = mc.pages_kb, 
-  virtual_memory_committed_kb = mc.virtual_memory_committed_kb
+  mc.pages_kb,
+  mc.virtual_memory_committed_kb
 FROM sys.dm_os_memory_clerks AS mc
 ORDER BY mc.pages_kb DESC;
 ```
 
 ---
 
-## Step 3: Run an aggregation query in AdventureWorksDW
+## Step 3: Run an aggregation in AdventureWorksDW
+
+> Use the DW name that matches your install and uncomment one line:
+>
+> * `USE AdventureWorksDW2019;`  or
+> * `USE AdventureWorksDW2022;`
 
 * Enable statistics
 
@@ -69,7 +78,8 @@ SET STATISTICS TIME ON;
 * Run a standard query
 
 ```sql
-USE AdventureWorksDW2019;
+-- USE AdventureWorksDW2019;
+-- USE AdventureWorksDW2022;
 GO
 SELECT 
     sc.EnglishProductSubcategoryName,
@@ -85,7 +95,7 @@ GROUP BY sc.EnglishProductSubcategoryName, t.SalesTerritoryCountry
 ORDER BY SUM(f.SalesAmount) DESC;
 ```
 
-* Force low memory grant to trigger spill
+* Force a low memory grant to increase chance of spilling to tempdb
 
 ```sql
 SELECT 
@@ -100,39 +110,47 @@ JOIN DimGeography AS g            ON c.GeographyKey = g.GeographyKey
 JOIN DimSalesTerritory AS t       ON g.SalesTerritoryKey = t.SalesTerritoryKey
 GROUP BY sc.EnglishProductSubcategoryName, t.SalesTerritoryCountry
 ORDER BY SUM(f.SalesAmount) DESC
-OPTION (HASH GROUP, MAX_GRANT_PERCENT = 1);
+OPTION (HASH GROUP, MAX_GRANT_PERCENT = 1);  -- supported in 2019 & 2022
 ```
 
 ---
 
 ## Step 4: Inspect memory grants and spills
 
-* Look at memory grants
+* Current/recent memory grants
 
 ```sql
 SELECT 
   DB_NAME(rs.database_id) AS dbname,
-  mg.request_time, mg.grant_time,
-  mg.requested_memory_kb, mg.granted_memory_kb, mg.max_used_memory_kb,
-  rs.status, rs.command, rs.wait_type
+  mg.request_time, 
+  mg.grant_time,
+  mg.requested_memory_kb, 
+  mg.granted_memory_kb, 
+  mg.required_memory_kb,
+  mg.max_used_memory_kb,
+  rs.status, 
+  rs.command, 
+  rs.wait_type
 FROM sys.dm_exec_query_memory_grants AS mg
 JOIN sys.dm_exec_requests AS rs
   ON mg.session_id = rs.session_id
 ORDER BY mg.request_time DESC;
 ```
 
-* Tempdb usage
+* Tempdb usage (query the DMV in tempdb context)
 
 ```sql
-SELECT * FROM sys.dm_db_file_space_usage;
+SELECT * 
+FROM tempdb.sys.dm_db_file_space_usage;
 ```
 
-* Find queries with spills
+* Find plans that reported spills
 
 ```sql
 SELECT TOP (20)
   qs.last_execution_time,
-  qs.total_worker_time, qs.total_elapsed_time,
+  qs.total_worker_time, 
+  qs.total_elapsed_time,
   qp.query_plan
 FROM sys.dm_exec_query_stats AS qs
 CROSS APPLY sys.dm_exec_query_plan(qs.plan_handle) AS qp
@@ -142,18 +160,24 @@ ORDER BY qs.last_execution_time DESC;
 
 ---
 
-## Step 5: Buffer pool growth (AdventureWorks)
+## Step 5: Observe buffer pool growth (AdventureWorks OLTP)
 
-* Clear cache
+> Use the OLTP DB name that matches your install and uncomment one line:
+>
+> * `USE AdventureWorks2019;`  or
+> * `USE AdventureWorks2022;`
+
+* Clear cache (test only)
 
 ```sql
-USE AdventureWorks2019;
+-- USE AdventureWorks2019;
+-- USE AdventureWorks2022;
 GO
 CHECKPOINT; 
 DBCC DROPCLEANBUFFERS;
 ```
 
-* Baseline buffer descriptors
+* Baseline: buffer descriptors per database
 
 ```sql
 SELECT DB_NAME(database_id) AS dbname, COUNT(*) AS pages
@@ -162,7 +186,7 @@ GROUP BY database_id
 ORDER BY pages DESC;
 ```
 
-* Read a larger table
+* Read a larger table to warm the cache
 
 ```sql
 SELECT COUNT(*) 
@@ -172,7 +196,7 @@ JOIN Sales.SalesOrderHeader AS soh
 OPTION (MAXDOP 1);
 ```
 
-* Inspect buffer descriptors again
+* Measure buffer descriptors again
 
 ```sql
 SELECT DB_NAME(database_id) AS dbname, COUNT(*) AS pages
@@ -185,7 +209,7 @@ ORDER BY pages DESC;
 
 ## Step 6: Reset configuration
 
-* Restore memory setting
+* Restore memory setting (example: 4096 MB or your standard)
 
 ```sql
 EXEC sp_configure 'max server memory (MB)', 4096;
@@ -201,7 +225,4 @@ SET STATISTICS TIME OFF;
 
 ---
 
-👉 This way, participants follow a **step-by-step structured lab**, see **cause and effect** clearly, and practice **monitoring SQL Server memory usage**.
-
-Would you like me to now generate this as a **PDF handout** with the steps nicely formatted for your students?
 
