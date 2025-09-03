@@ -17,38 +17,40 @@ GO
 ## Step 2: Nested Loops Join (force it for clarity)
 
 ```sql
--- Small, selective join; the hint guarantees the algorithm used
-SELECT TOP (100) h.SalesOrderID, d.SalesOrderDetailID
+-- Make the outer input 1 row → optimizer naturally prefers Nested Loops
+USE AdventureWorks;
+GO
+DECLARE @OrderID int = (SELECT MIN(SalesOrderID) FROM Sales.SalesOrderHeader);
+
+SELECT h.SalesOrderID, d.SalesOrderDetailID
 FROM Sales.SalesOrderHeader AS h
 INNER JOIN Sales.SalesOrderDetail AS d
   ON d.SalesOrderID = h.SalesOrderID
-WHERE h.OrderDate >= '2013-07-01'
-OPTION (LOOP JOIN);
+WHERE h.SalesOrderID = @OrderID;   -- highly selective outer input (1 row)
 ```
 
 *Open the plan → you should see a **Nested Loops** operator.*
 
-## Step 3: Merge Join (force it)
+## Step 3: Merge Join 
 
 ```sql
 -- Merge Join requires ordered inputs; optimizer will add Sorts if needed
-SELECT h.SalesOrderID, d.SalesOrderDetailID
+SELECT TOP (100) h.SalesOrderID, d.SalesOrderDetailID
 FROM Sales.SalesOrderHeader AS h
 INNER JOIN Sales.SalesOrderDetail AS d
   ON d.SalesOrderID = h.SalesOrderID
-OPTION (MERGE JOIN);
+WHERE h.OrderDate >= '2013-07-01';
 ```
 
 *Open the plan → you should see a **Merge Join** (with Sorts if necessary).*
 
-## Step 4: Hash Match (force it)
+## Step 4: Hash Match 
 
 ```sql
 SELECT h.SalesOrderID, d.SalesOrderDetailID
 FROM Sales.SalesOrderHeader AS h
 INNER JOIN Sales.SalesOrderDetail AS d
   ON d.SalesOrderID = h.SalesOrderID
-OPTION (HASH JOIN);
 ```
 
 *Open the plan → you should see a **Hash Match (Join)**.*
