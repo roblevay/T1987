@@ -1,38 +1,64 @@
-# Exercise 1: Inspect and update statistics
 
-## Step 1: Create and inspect a statistic (histogram)
+# Exercise 1: Simple statistics demo (always shows a difference)
 
-* Create a manual statistic on `LastName`, then inspect it.
+## Step 1: Create skewed data
+
+* Use a tiny table with one very rare value (1) and many zeros.
 
 ```sql
-USE AdventureWorks
+USE AdventureWorks2019;  -- eller AdventureWorks2022
 GO
-CREATE STATISTICS ST_Person_LastName ON Person.Person(LastName) WITH FULLSCAN;
-DBCC SHOW_STATISTICS ('Person.Person', 'ST_Person_LastName') WITH STAT_HEADER, DENSITY_VECTOR, HISTOGRAM;
+IF OBJECT_ID('dbo.StatsDemo','U') IS NOT NULL DROP TABLE dbo.StatsDemo;
+CREATE TABLE dbo.StatsDemo(Value int NOT NULL);
+
+-- 50,000 zeros (common value)
+INSERT dbo.StatsDemo(Value)
+SELECT TOP (50000) 0
+FROM sys.all_objects a CROSS JOIN sys.all_objects b;
+
+-- 1 row with value = 1 (rare value)
+INSERT dbo.StatsDemo(Value) VALUES (1);
 ```
 
-## Step 2: Run a selective query and compare estimates
+## Step 2: Create a badly sampled statistic
 
-* Turn on an estimated/actual plan and run a filter using the same column.
+* Small sample is likely to **miss** the rare value.
 
 ```sql
-SET STATISTICS XML ON;  -- optional: to see estimates inline
-SELECT COUNT(*) 
-FROM Person.Person
-WHERE LastName = 'Anderson';
-SET STATISTICS XML OFF;
+CREATE STATISTICS ST_Value ON dbo.StatsDemo(Value) WITH SAMPLE 1 PERCENT;
 ```
 
-## Step 3: Update statistics and re-run
+## Step 3: Run the query (before updating stats)
 
-* Update the statistic and re-run the query to compare estimates.
+* Turn on **Include Actual Execution Plan** (Ctrl+M).
+* Run and compare **Estimated vs Actual Number of Rows** on the plan.
 
 ```sql
-UPDATE STATISTICS Person.Person ST_Person_LastName WITH FULLSCAN;
--- Re-run the SELECT above
+SELECT COUNT(*)
+FROM dbo.StatsDemo
+WHERE Value = 1;   -- Actual = 1; Estimated will be very low/near 0
 ```
 
----
+## Step 4: Update statistics and run again
+
+* Now the histogram knows about value **1** → estimate becomes accurate.
+
+```sql
+UPDATE STATISTICS dbo.StatsDemo ST_Value WITH FULLSCAN;
+
+SELECT COUNT(*)
+FROM dbo.StatsDemo
+WHERE Value = 1;   -- Actual = 1; Estimated ≈ 1 (matches)
+```
+
+## Step 5: (Optional) Clean up
+
+```sql
+-- DROP TABLE dbo.StatsDemo;
+```
+
+**Observation:** Före uppdatering missar statistiken den sällsynta “1”: Estimated ≪ 1.
+Efter `WITH FULLSCAN` innehåller histogrammet värdet → Estimated ≈ 1. ✔️
 
 # Exercise 2: Create a clustered index (from a heap)
 
