@@ -11,9 +11,9 @@ GO
 IF OBJECT_ID('dbo.StatsDemo','U') IS NOT NULL DROP TABLE dbo.StatsDemo;
 CREATE TABLE dbo.StatsDemo(Value int NOT NULL);
 
--- 50,000 zeros (common value)
+-- 500,000 zeros (common value)
 INSERT dbo.StatsDemo(Value)
-SELECT TOP (50000) 0
+SELECT TOP (500000) 0
 FROM sys.all_objects a CROSS JOIN sys.all_objects b;
 ```
 
@@ -22,7 +22,7 @@ FROM sys.all_objects a CROSS JOIN sys.all_objects b;
 
 
 ```sql
-CREATE STATISTICS ST_Value ON dbo.StatsDemo(Value) WITH FULLSCAN;
+CREATE STATISTICS ST_Value ON dbo.StatsDemo(Value);
 ```
 
 ## Step 3: Run the query (before updating stats)
