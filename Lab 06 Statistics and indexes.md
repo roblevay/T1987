@@ -141,6 +141,7 @@ FROM Sales.SalesOrderHeader
 WHERE CustomerID = 11000
   AND OrderDate >= '2014-01-01';
 ```
+* There will be a key lookup for TotalDue and OrderDate
 
 ## Step 2: Create a nonclustered index and re-run
 
