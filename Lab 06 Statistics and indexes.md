@@ -5,7 +5,7 @@
 * Create a manual statistic on `LastName`, then inspect it.
 
 ```sql
-USE AdventureWorks2019;
+USE AdventureWorks
 GO
 CREATE STATISTICS ST_Person_LastName ON Person.Person(LastName) WITH FULLSCAN;
 DBCC SHOW_STATISTICS ('Person.Person', 'ST_Person_LastName') WITH STAT_HEADER, DENSITY_VECTOR, HISTOGRAM;
