@@ -1,28 +1,26 @@
 
 # Exercise 1: Simple statistics demo (always shows a difference)
 
-## Step 1: Create skewed data
+## Step 1: Create data
 
-* Use a tiny table with one very rare value (1) and many zeros.
+* Create a table and fill with data
 
 ```sql
-USE AdventureWorks 
+USE AdventureWorks;
 GO
-IF OBJECT_ID('dbo.StatsDemo','U') IS NOT NULL DROP TABLE dbo.StatsDemo;
-CREATE TABLE dbo.StatsDemo(Value int NOT NULL);
+IF OBJECT_ID('dbo.Lastnames','U') IS NOT NULL DROP TABLE dbo.Lastnames;
+CREATE TABLE dbo.Lastnames(Lastname VARCHAR(50) NOT NULL);
 
--- 500,000 zeros (common value)
-INSERT dbo.StatsDemo(Value)
-SELECT TOP (500000) 0
-FROM sys.all_objects a CROSS JOIN sys.all_objects b;
+-- Basdata
+INSERT dbo.Lastnames(Lastname)
+SELECT  LastName FROM Person.Person;
 ```
 
 ## Step 2: Create statistics
 
 
-
 ```sql
-CREATE STATISTICS ST_Value ON dbo.StatsDemo(Value);
+CREATE STATISTICS ST_Lastname ON dbo.Lastnames(Lastname);
 ```
 
 ## Step 3: Run the query (before updating stats)
@@ -31,21 +29,40 @@ CREATE STATISTICS ST_Value ON dbo.StatsDemo(Value);
 * Turn on **Include Actual Execution Plan** (Ctrl+M).
 * Run the query and click on the **Execution Plan** tab
 * Hover the mouse pointer over the **Table Scan** operator
-* Run and compare **Estimated Number of Rows for all executions vs Actual Number of Rows for all executions** on the plan.
+* Run and compare **Estimated Number of Rows for all executions vs Actual Number of Rows for all executions** on the plan. They will probably not b the same.
 
 ```sql
-SELECT COUNT(*)
-FROM dbo.StatsDemo
-WHERE Value = 1;   -- Actual = 0; Estimated will be 1
+SELECT COUNT(*) 
+FROM dbo.Lastnames
+WHERE Lastname = 'Musk'
+OPTION (RECOMPILE);
 ```
 
 ## Step 4: Update statistics and run again
 
-* Now the histogram knows about value **1** → estimate becomes accurate.
+* Insert new values
+* 
+```sql
+INSERT dbo.Lastnames(Lastname) VALUES ('Musk')
+GO 5;
+```
+
+* Run the query again
 
 ```sql
-UPDATE STATISTICS dbo.StatsDemo ST_Value WITH FULLSCAN;
+SELECT COUNT(*) 
+FROM dbo.Lastnames
+WHERE Lastname = 'Musk'
+OPTION (RECOMPILE);
+```
+* Now estimated and actual rows are not the same
+* Update statistics 
 
+```sql
+UPDATE STATISTICS  dbo.Lastnames ST_Lastname   WITH FULLSCAN;
+```
+
+```sql
 SELECT COUNT(*)
 FROM dbo.StatsDemo
 WHERE Value = 1;   -- Actual = 1; Estimated ≈ 1 (matches)
