@@ -147,8 +147,3 @@ Operators now show **Actual Execution Mode = Batch**. You can compare both plans
 ```sql
 DROP TABLE IF EXISTS #fis;
 ```
-
----
-
-If you want, I can bundle these into a single handout file and add tiny “Observation” bullets under each step so students know exactly what to click in the plan (operator → Properties → Execution Mode, etc.).
-
