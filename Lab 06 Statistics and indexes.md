@@ -171,7 +171,7 @@ WHERE CustomerID = 11000
 * Work on a copy to keep original intact.
 
 ```sql
-USE AdventureWorksDW2019;
+USE AdventureWorksDW;
 GO
 IF OBJECT_ID('dbo.FactInternetSales_CS') IS NOT NULL DROP TABLE dbo.FactInternetSales_CS;
 SELECT *
