@@ -189,7 +189,8 @@ ON dbo.FactInternetSales_CS;
 ```
 
 ## Step 3: Run an analytic query
-
+* Turn on **Include Actual Execution Plan** (Ctrl+M).
+* Run the query and click on the **Execution Plan** tab
 * Verify the plan uses a Columnstore scan and benefits from compression/segment elimination.
 
 ```sql
