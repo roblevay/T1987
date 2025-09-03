@@ -27,19 +27,16 @@ CREATE STATISTICS ST_Value ON dbo.StatsDemo(Value);
 
 ## Step 3: Run the query (before updating stats)
 
-* Update the table
-```sql
--- 1 row with value = 1 (rare value)
-INSERT dbo.StatsDemo(Value) VALUES (1);
-```
 
 * Turn on **Include Actual Execution Plan** (Ctrl+M).
-* Run and compare **Estimated vs Actual Number of Rows** on the plan.
+* Run the query and click on the **Execution Plan** tab
+* Hover the mouse pointer over the **Table Scan** operator
+* Run and compare **Estimated Number of Rows for all executions vs Actual Number of Rows for all executions** on the plan.
 
 ```sql
 SELECT COUNT(*)
 FROM dbo.StatsDemo
-WHERE Value = 1;   -- Actual = 1; Estimated will be very low/near 0
+WHERE Value = 1;   -- Actual = 0; Estimated will be 1
 ```
 
 ## Step 4: Update statistics and run again
