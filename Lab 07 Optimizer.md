@@ -1,7 +1,3 @@
-Here you go—**three simple, reproducible exercises** for SQL Server 2019 using **AdventureWorks** and **AdventureWorksDW**. Everything is in English and follows your MD layout.
-
----
-
 # Exercise 1: Show join algorithms (Nested Loops, Merge Join, Hash Match)
 
 ## Step 1: Setup
