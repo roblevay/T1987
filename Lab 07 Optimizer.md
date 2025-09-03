@@ -140,7 +140,9 @@ GROUP BY CustomerKey
 
 
 **What to see:**
-Operators now show **Actual Execution Mode = Batch**. You can compare both plans side-by-side.
+**What to see:**
+In the plan, key operators (e.g., **Hash Match (Aggregate)**, **Parallelism**) show **Actual Execution Mode = Batch**. The operator icons have a small stacked “column” look in newer SSMS.
+
 
 ## Step 4: Cleanup (optional)
 
