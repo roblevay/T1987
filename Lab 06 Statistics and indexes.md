@@ -86,7 +86,7 @@ OPTION (RECOMPILE);   -- Actual and estimated are the same
 * `SELECT INTO` creates a heap by default.
 
 ```sql
-USE AdventureWorks2019;
+USE AdventureWorks;
 GO
 IF OBJECT_ID('dbo.PersonHeap') IS NOT NULL DROP TABLE dbo.PersonHeap;
 SELECT BusinessEntityID, FirstName, LastName
