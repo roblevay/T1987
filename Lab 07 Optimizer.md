@@ -2,8 +2,8 @@
 
 ## Step 1: Setup
 
-- Start SQL Server Management Studio
-- Connect to the Server North 
+* Start SQL Server Management Studio
+* Connect to the Server North 
 * Open a query window
 * Enable Actual Execution Plan (Ctrl+M in SSMS)
 * (Optional) reset plan cache — **not for production**
