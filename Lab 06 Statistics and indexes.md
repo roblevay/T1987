@@ -15,7 +15,7 @@ CREATE TABLE dbo.Lastnames(Lastname VARCHAR(50) NOT NULL);
 
 -- Basdata
 INSERT dbo.Lastnames(Lastname)
-SELECT  LastName FROM Person.Person;
+SELECT  TOP 2000 LastName FROM Person.Person;
 ```
 
 ## Step 2: Create statistics
