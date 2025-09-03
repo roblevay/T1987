@@ -22,7 +22,7 @@ FROM sys.all_objects a CROSS JOIN sys.all_objects b;
 
 
 ```sql
-CREATE STATISTICS ST_Value ON dbo.StatsDemo(Value) WITH SAMPLE 1 PERCENT;
+CREATE STATISTICS ST_Value ON dbo.StatsDemo(Value) WITH FULLSCAN;
 ```
 
 ## Step 3: Run the query (before updating stats)
