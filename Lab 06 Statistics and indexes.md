@@ -62,6 +62,7 @@ WHERE Lastname = 'Musk';
 UPDATE STATISTICS  dbo.Lastnames ST_Lastname   WITH FULLSCAN;
 ```
 * In Object Explorer, examine the statistics for ST_Lastname. There should be 5 Musks
+* Run the query again, using OPTION RECOMPILE to get s fresh query plan
 
 ```sql
 SELECT COUNT(*)
