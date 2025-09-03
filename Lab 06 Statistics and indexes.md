@@ -22,7 +22,7 @@ SELECT  LastName FROM Person.Person;
 
 
 ```sql
-CREATE STATISTICS ST_Lastname ON dbo.Lastnames(Lastname);
+CREATE STATISTICS ST_Lastname ON dbo.Lastnames(Lastname) WITH FULLSCAN;
 ```
 
 ## Step 3: Run the query (before updating stats)
