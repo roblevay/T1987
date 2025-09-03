@@ -145,17 +145,22 @@ WHERE CustomerID = 11000
 
 ## Step 2: Create a nonclustered index and re-run
 
-* Key columns match the predicates; `INCLUDE` covers the SELECT list.
+* Create a nonclustered covering index
 
 ```sql
 CREATE NONCLUSTERED INDEX IX_SOH_CustomerID_OrderDate
 ON Sales.SalesOrderHeader(CustomerID, OrderDate)
 INCLUDE (TotalDue);
-
--- Re-run the baseline query above
 ```
 
-*(Tip: Check the actual plan—should switch from scan to seek and become “covered”.)*
+* Re-run the baseline query
+```sql
+SELECT SalesOrderID, OrderDate, TotalDue
+FROM Sales.SalesOrderHeader
+WHERE CustomerID = 11000
+  AND OrderDate >= '2014-01-01';
+```
+* Check the actual plan—should switch from scan to seek and become “covered”
 
 ---
 
