@@ -6,7 +6,7 @@
 * Use a tiny table with one very rare value (1) and many zeros.
 
 ```sql
-USE AdventureWorks2019;  -- eller AdventureWorks2022
+USE AdventureWorks 
 GO
 IF OBJECT_ID('dbo.StatsDemo','U') IS NOT NULL DROP TABLE dbo.StatsDemo;
 CREATE TABLE dbo.StatsDemo(Value int NOT NULL);
