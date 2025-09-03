@@ -138,10 +138,18 @@ FROM #fis
 GROUP BY CustomerKey
 ```
 
-
-**What to see:**
 **What to see:**
 In the plan, key operators (e.g., **Hash Match (Aggregate)**, **Parallelism**) show **Actual Execution Mode = Batch**. The operator icons have a small stacked “column” look in newer SSMS.
+
+* Check if batchmode over rowstore is turned on in the database
+
+```sql
+-- 1 = ON, 0 = OFF
+SELECT name,
+       value
+FROM sys.database_scoped_configurations
+WHERE name = 'BATCH_MODE_ON_ROWSTORE';
+```
 
 
 ## Step 4: Cleanup (optional)
