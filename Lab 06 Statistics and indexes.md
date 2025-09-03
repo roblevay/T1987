@@ -31,7 +31,7 @@ CREATE STATISTICS ST_Lastname ON dbo.Lastnames(Lastname) WITH FULLSCAN;
 * Turn on **Include Actual Execution Plan** (Ctrl+M).
 * Run the query and click on the **Execution Plan** tab
 * Hover the mouse pointer over the **Table Scan** operator
-* Run and compare **Estimated Number of Rows for all executions vs Actual Number of Rows for all executions** on the plan. They will probably not b the same.
+* Run and compare **Estimated Number of Rows for all executions vs Actual Number of Rows for all executions** on the plan. They will probably not be the same.
 
 ```sql
 SELECT COUNT(*) 
