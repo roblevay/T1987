@@ -67,7 +67,7 @@ UPDATE STATISTICS  dbo.Lastnames ST_Lastname   WITH FULLSCAN;
 ```sql
 SELECT COUNT(*)
 FROM dbo.Lastnames
-WHERE Lastname = 'Musk';
+WHERE Lastname = 'Musk'
 OPTION (RECOMPILE);   -- Actual and estimated are the same
 --Recompile is necessary to get a fresh query plan
 ```
