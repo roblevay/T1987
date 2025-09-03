@@ -33,11 +33,22 @@ Identify the suspended (blocked) query and the blocking query
 
 ## Step 3: Examine the lock using sp_whoisactive
 
-* Download and install sp_whoisactive from [http://whoisactive.com/](http://whoisactive.com/)
-
+* Download and install sp_whoisactive from https://github.com/roblevay/T1987/Files
+* Open a new query window and run 
 
 ```sql
-EXEC sp_who2
+EXEC sp_whoisactive
+```
+
+Identify the suspended (blocked) query and the blocking query
+
+## Step 4: Examine the lock using sp_blitzlock
+
+* Download and install sp_blitzlock from https://github.com/roblevay/T1987/Files
+* Open a new query window and run 
+
+```sql
+EXEC sp_whoisactive
 ```
 
 Identify the suspended (blocked) query and the blocking query
