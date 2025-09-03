@@ -3,6 +3,9 @@
 
 ## Step 1: Create data
 
+- Start SQL Server Management Studio
+- Connect to the Server North 
+* Open a query window
 * Create a table and fill with data
 
 ```sql
