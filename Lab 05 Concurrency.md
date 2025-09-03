@@ -33,7 +33,7 @@ Identify the suspended (blocked) query and the blocking query
 
 ## Step 3: Examine the lock using sp_whoisactive
 
-* Download and install sp_whoisactive from [http://whoisactive.com/](http://whoisactive.com/)<img width="279" height="53" alt="image" src="https://github.com/user-attachments/assets/541fd6b5-029f-4850-a875-599c78f476de" />
+* Download and install sp_whoisactive from [http://whoisactive.com/](http://whoisactive.com/)
 
 
 ```sql
