@@ -1,4 +1,4 @@
-# Exercise 1: Transaction
+# Exercise 1: Transactions and locks
 
 ## Step 1: Create a lock
 
@@ -42,13 +42,13 @@ EXEC sp_whoisactive
 
 Identify the suspended (blocked) query and the blocking query
 
-## Step 4: Examine the lock using sp_blitzlock
+## Step 4: Examine the lock using sp_blitzwho
 
-* Download and install sp_blitzlock from https://github.com/roblevay/T1987/Files
+* Download and install sp_blitzwho from https://github.com/roblevay/T1987/Files
 * Open a new query window and run 
 
 ```sql
-EXEC sp_whoisactive
+EXEC sp_blitzwho
 ```
 
 Identify the suspended (blocked) query and the blocking query
