@@ -104,6 +104,7 @@ GO
 ```
 
 -- Create a moderately larger rowstore set to reliably trigger batch mode
+```sql
 IF OBJECT_ID('tempdb..#fis') IS NOT NULL DROP TABLE #fis;
 SELECT f.*
 INTO #fis
