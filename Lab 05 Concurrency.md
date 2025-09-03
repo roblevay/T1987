@@ -52,3 +52,37 @@ EXEC sp_blitzwho
 ```
 
 Identify the suspended (blocked) query and the blocking query
+
+## Step 5: Dirty read
+
+* Open a new query window and run 
+
+```sql
+SELECT *
+FROM Person.Person WITH (NOLOCK)
+WHERE BusinessEntityID = 1;
+```
+* You can now read in an open transaction (dirty read)
+
+## Step 6: Rollback the transaction
+
+* Return to Query window 1 which reads
+
+
+```sql
+USE AdventureWorks
+BEGIN TRAN
+	UPDATE Person.Person
+	SET LastName='Andersson'
+	WHERE BusinessEntityID=1
+```
+
+* Execute the following:
+
+```sql
+ROLLBACK TRAN
+```
+
+Now, the blocking lock is released and the value in Person.Person is returned to the original value
+
+
