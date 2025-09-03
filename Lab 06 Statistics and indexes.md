@@ -6,6 +6,8 @@
 * Create a table and fill with data
 
 ```sql
+DBCC FREEPROCCACHE--Nollställ procedurcachen, inte i produktion!
+
 USE AdventureWorks;
 GO
 IF OBJECT_ID('dbo.Lastnames','U') IS NOT NULL DROP TABLE dbo.Lastnames;
@@ -34,8 +36,7 @@ CREATE STATISTICS ST_Lastname ON dbo.Lastnames(Lastname);
 ```sql
 SELECT COUNT(*) 
 FROM dbo.Lastnames
-WHERE Lastname = 'Musk'
-OPTION (RECOMPILE);
+WHERE Lastname = 'Musk';
 ```
 
 ## Step 4: Update statistics and run again
@@ -47,35 +48,35 @@ INSERT dbo.Lastnames(Lastname) VALUES ('Musk')
 GO 5;
 ```
 
-* Run the query again
+* Run the query again, estimated and actual are not the same
 
 ```sql
 SELECT COUNT(*) 
 FROM dbo.Lastnames
-WHERE Lastname = 'Musk'
-OPTION (RECOMPILE);
+WHERE Lastname = 'Musk';
 ```
-* Now estimated and actual rows are not the same
+
 * Update statistics 
 
 ```sql
 UPDATE STATISTICS  dbo.Lastnames ST_Lastname   WITH FULLSCAN;
 ```
+* In Object Explorer, examine the statistics for ST_Lastname. There should be 5 Musks
 
 ```sql
 SELECT COUNT(*)
-FROM dbo.StatsDemo
-WHERE Value = 1;   -- Actual = 1; Estimated ≈ 1 (matches)
+FROM dbo.Lastnames
+WHERE Lastname = 'Musk';
+OPTION (RECOMPILE);   -- Actual and estimated are the same
+--Recompile is necessary to get a fresh query plan
 ```
 
 ## Step 5: (Optional) Clean up
 
 ```sql
--- DROP TABLE dbo.StatsDemo;
+-- DROP TABLE dbo.Lastnames
 ```
 
-**Observation:** Före uppdatering missar statistiken den sällsynta “1”: Estimated ≪ 1.
-Efter `WITH FULLSCAN` innehåller histogrammet värdet → Estimated ≈ 1. ✔️
 
 # Exercise 2: Create a clustered index (from a heap)
 
