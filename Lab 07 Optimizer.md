@@ -14,7 +14,7 @@ USE AdventureWorks;
 GO
 ```
 
-## Step 2: Nested Loops Join (force it for clarity)
+## Step 2: Nested Loops Join 
 
 ```sql
 -- Make the outer input 1 row → optimizer naturally prefers Nested Loops
