@@ -96,6 +96,10 @@ FROM Person.Person;
 
 ## Step 2: Baseline query (heap scan likely)
 
+* Turn on **Include Actual Execution Plan** (Ctrl+M).
+* Run the query and click on the **Execution Plan** tab
+* Notice that **Table Scan** is used
+
 ```sql
 SELECT *
 FROM dbo.PersonHeap
