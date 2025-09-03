@@ -128,7 +128,7 @@ In the plan, key operators (e.g., **Hash Match (Aggregate)**, **Parallelism**) s
 
 ## Step 3: Contrast with batch mode
 
-```sql
+
 ```sql
 ALTER DATABASE [AdventureWorksDW] SET COMPATIBILITY_LEVEL = 150--SQL Server 2019
 GO
@@ -137,7 +137,7 @@ SELECT CustomerKey, SUM(SalesAmount) AS TotalSales
 FROM #fis
 GROUP BY CustomerKey
 ```
-```
+
 
 **What to see:**
 Operators now show **Actual Execution Mode = Batch**. You can compare both plans side-by-side.
