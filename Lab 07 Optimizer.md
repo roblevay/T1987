@@ -25,7 +25,7 @@ INNER JOIN Sales.SalesOrderDetail AS d
 WHERE h.SalesOrderID = 43659;   -- highly selective outer input (1 row)
 ```
 
-*Open the plan → you should see a **Nested Loops** operator.*
+*Open the plan → you should see a **Nested Loops** operator. If one of the inputs is very small, nested loops are used.*. 
 
 ## Step 3: Merge Join 
 
@@ -38,7 +38,8 @@ INNER JOIN Sales.SalesOrderDetail AS d
 WHERE h.OrderDate >= '2013-07-01';
 ```
 
-*Open the plan → you should see a **Merge Join** (with Sorts if necessary).*
+*Open the plan → you should see a **Merge Join** (with Sorts if necessary).Merge Join excels when both inputs are sorted and of similar size, enabling sequential scans, minimal memory, and predictable performance.*
+
 
 ## Step 4: Hash Match 
 
@@ -49,7 +50,7 @@ INNER JOIN Sales.SalesOrderDetail AS d
   ON d.SalesOrderID = h.SalesOrderID
 ```
 
-*Open the plan → you should see a **Hash Match (Join)**.*
+*Open the plan → you should see a **Hash Match (Join)**.Hash Join is chosen for large, unsorted inputs with an equality predicate. It builds a hash on the smaller input, then probes efficiently, avoiding sorts and random seeks.*
 
 ---
 
