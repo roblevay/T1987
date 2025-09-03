@@ -15,20 +15,23 @@ CREATE TABLE dbo.StatsDemo(Value int NOT NULL);
 INSERT dbo.StatsDemo(Value)
 SELECT TOP (50000) 0
 FROM sys.all_objects a CROSS JOIN sys.all_objects b;
-
--- 1 row with value = 1 (rare value)
-INSERT dbo.StatsDemo(Value) VALUES (1);
 ```
 
-## Step 2: Create a badly sampled statistic
+## Step 2: Create statistics
 
-* Small sample is likely to **miss** the rare value.
+
 
 ```sql
 CREATE STATISTICS ST_Value ON dbo.StatsDemo(Value) WITH SAMPLE 1 PERCENT;
 ```
 
 ## Step 3: Run the query (before updating stats)
+
+* Update the table
+```sql
+-- 1 row with value = 1 (rare value)
+INSERT dbo.StatsDemo(Value) VALUES (1);
+```
 
 * Turn on **Include Actual Execution Plan** (Ctrl+M).
 * Run and compare **Estimated vs Actual Number of Rows** on the plan.
