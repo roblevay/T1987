@@ -96,13 +96,12 @@ ORDER BY ProductKey;
 ## Step 1: Setup (DW) and create a bigger rowset (temporary)
 
 * Enable Actual Execution Plan (Ctrl+M)
-* Ensure batch mode on rowstore is allowed (default ON in SQL 2019)
+
 
 ```sql
-USE AdventureWorksDW2019;
+USE AdventureWorksDW;
 GO
-ALTER DATABASE SCOPED CONFIGURATION SET BATCH_MODE_ON_ROWSTORE = ON;
-GO
+```
 
 -- Create a moderately larger rowstore set to reliably trigger batch mode
 IF OBJECT_ID('tempdb..#fis') IS NOT NULL DROP TABLE #fis;
@@ -112,29 +111,35 @@ FROM FactInternetSales AS f
 CROSS APPLY (VALUES(1),(2),(3),(4)) v(n); -- ~4x rows, still quick to create
 ```
 
-## Step 2: Run an analytic aggregation (should use batch mode)
+## Step 2: Try with SQL Server 2017
 
 ```sql
+ALTER DATABASE [AdventureWorksDW] SET COMPATIBILITY_LEVEL = 140--SQL Server 2017
+GO
+
 SELECT CustomerKey, SUM(SalesAmount) AS TotalSales
 FROM #fis
 GROUP BY CustomerKey
-OPTION (MAXDOP 4);  -- parallel + analytic pattern helps batch mode
 ```
 
 **What to see:**
-In the plan, key operators (e.g., **Hash Match (Aggregate)**, **Parallelism**) show **Actual Execution Mode = Batch**. The operator icons have a small stacked “column” look in newer SSMS.
+In the plan, key operators (e.g., **Hash Match (Aggregate)**, **Parallelism**) show **Actual Execution Mode = Row**. The operator icons have a small stacked “column” look in newer SSMS.
 
-## Step 3: Contrast with row mode (turn batch off for this statement)
+## Step 3: Contrast with batch mode
 
 ```sql
+```sql
+ALTER DATABASE [AdventureWorksDW] SET COMPATIBILITY_LEVEL = 150--SQL Server 2019
+GO
+
 SELECT CustomerKey, SUM(SalesAmount) AS TotalSales
 FROM #fis
 GROUP BY CustomerKey
-OPTION (MAXDOP 4, USE HINT('DISALLOW_BATCH_MODE'));
+```
 ```
 
 **What to see:**
-Operators now show **Actual Execution Mode = Row**. You can compare both plans side-by-side.
+Operators now show **Actual Execution Mode = Batch**. You can compare both plans side-by-side.
 
 ## Step 4: Cleanup (optional)
 
