@@ -18,15 +18,11 @@ GO
 
 ```sql
 -- Make the outer input 1 row → optimizer naturally prefers Nested Loops
-USE AdventureWorks;
-GO
-DECLARE @OrderID int = (SELECT MIN(SalesOrderID) FROM Sales.SalesOrderHeader);
-
 SELECT h.SalesOrderID, d.SalesOrderDetailID
 FROM Sales.SalesOrderHeader AS h
 INNER JOIN Sales.SalesOrderDetail AS d
   ON d.SalesOrderID = h.SalesOrderID
-WHERE h.SalesOrderID = @OrderID;   -- highly selective outer input (1 row)
+WHERE h.SalesOrderID = 43659;   -- highly selective outer input (1 row)
 ```
 
 *Open the plan → you should see a **Nested Loops** operator.*
