@@ -83,6 +83,7 @@ BEGIN TRAN
 ROLLBACK TRAN
 ```
 
-Now, the blocking lock is released and the value in Person.Person is returned to the original value
+* Now, the blocking lock is released and the value in Person.Person is returned to the original value
+* Close all open query windows
 
 
