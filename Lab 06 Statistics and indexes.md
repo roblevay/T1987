@@ -130,7 +130,8 @@ WHERE BusinessEntityID = 1;
 
 ## Step 1: Baseline query
 
-* Typical OLTP lookup + projection.
+* Turn on **Include Actual Execution Plan** (Ctrl+M).
+* Run the query and click on the **Execution Plan** tab
 
 ```sql
 USE AdventureWorks2019;
