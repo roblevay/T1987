@@ -61,30 +61,35 @@ INNER JOIN Sales.SalesOrderDetail AS d
 * Enable Actual Execution Plan (Ctrl+M)
 
 ```sql
-USE AdventureWorks;
-GO
-DECLARE @ln varchar(50) = 'Anderson';  -- intentionally varchar
-SELECT BusinessEntityID, LastName
-FROM Person.Person
-WHERE LastName = @ln;                  -- LastName is nvarchar → implicit convert
+USE AdventureWorksDW; -- 
+SELECT CAST(ProductKey AS char(200)) AS BigKey
+FROM FactInternetSales
+ORDER BY BigKey
+
 ```
 
 **What to see:**
-A yellow warning triangle on the **Seek/Scan** operator. In Properties/ToolTip you’ll find a predicate with `CONVERT_IMPLICIT(...)` and a warning like “Type conversion in expression may affect Seek Plan.”
+A yellow warning triangle on the **Seek/Scan** operator. In Properties/ToolTip you’ll find a predicate with `CONVERT_IMPLICIT(...)` and a warning like “Operator used tempdb to spill data during execution ...”
 
 ## Step 2: Fix the warning
 
 ```sql
--- Use matching data type (nvarchar) or an N-prefixed literal
-DECLARE @ln nvarchar(50) = N'Anderson';
-SELECT BusinessEntityID, LastName
-FROM Person.Person
-WHERE LastName = @ln;  -- warning disappears
+USE AdventureWorksDW; -- 
+SELECT CAST(ProductKey AS char(20)) AS BigKey--Use smaller row width
+FROM FactInternetSales
+ORDER BY BigKey
 ```
 
-**Observation:** Warning icon is gone; predicate no longer shows `CONVERT_IMPLICIT`.
+**Observation:** Still a warning: "Type conversion in expression (CONVERT(char(20),[AdventureWorksDW].[dbo].[FactInternetSales].[ProductKey],0)) may affect "CardinalityEstimate" in query plan choice".
 
----
+```sql
+USE AdventureWorksDW;
+SELECT ProductKey   -- lämna som int
+FROM dbo.FactInternetSales
+ORDER BY ProductKey;
+```
+**Observation:** *Remove the conversion or live with the warning*
+
 
 # Exercise 3: Batch mode over rowstore (AdventureWorksDW)
 
