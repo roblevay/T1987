@@ -42,7 +42,7 @@ WHERE Lastname = 'Musk';
 ## Step 4: Update statistics and run again
 
 * Insert new values
-* 
+
 ```sql
 INSERT dbo.Lastnames(Lastname) VALUES ('Musk')
 GO 5;
