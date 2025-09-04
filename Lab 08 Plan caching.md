@@ -150,6 +150,7 @@ GO
 EXEC dbo.GetDetailsByProduct_Unknown @ProductID = 897;--Insert the rare product id from step 2 above
 EXEC dbo.GetDetailsByProduct_Unknown @ProductID = 870;--Insert the common product id from step 2 above
 
+--Note: **Clustered Index Scan** is probably used for both executions
 ```
 
 *Observation:*
