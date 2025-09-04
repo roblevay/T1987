@@ -48,7 +48,7 @@ ORDER BY COUNT(*) ASC;   -- fewest rows
 SELECT CommonProductID = @Common, RareProductID = @Rare;
 ```
 
-*You should see two IDs; **@Rare** returns very few rows, **@Common** returns many.*
+*You should see two IDs; **@Rare** returns very few rows, **@Common** returns many. In my test, 870 is common and 897 rare*
 
 ---
 
