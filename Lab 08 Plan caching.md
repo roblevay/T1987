@@ -78,27 +78,28 @@ SET STATISTICS IO ON;
 SET STATISTICS TIME ON;
 
 -- 4a. Compile for RARE (fast plan: Nested Loops + many Key Lookups OK for few rows)
-EXEC dbo.GetDetailsByProduct @ProductID = @Rare;
+EXEC dbo.GetDetailsByProduct @ProductID = 897;--Insert the rare product id from step 2 above
+```
 
+Examine the execution plan. Very likely, a loop join will be used because of the few values returned. 
+
+```sql
 -- 4b. Reuse the same plan for COMMON (now the same plan does MANY lookups = slow)
-EXEC dbo.GetDetailsByProduct @ProductID = @Common;
+EXEC dbo.GetDetailsByProduct @ProductID = 870;--Insert the common product id from step 2 above
 
 SET STATISTICS IO OFF;
 SET STATISTICS TIME OFF;
 ```
 
-**What to observe:**
-
-* Execution Plan for both calls is the **same** (reused).
-* With **@Common**, you’ll see **many Key Lookups** and higher IO/Time; **Estimated vs Actual rows** on the Seek/Lookup will diverge.
-* This is **parameter sniffing**: the plan compiled for a rare value is reused for a common value.
+Examine the execution plan. The same execution plan will be used because of parameter sniffing. Make a not of the execution time.
 
 ---
 
 ## Step 5: Quick fixes (two easy patterns)
 
-### Fix A: Recompile per-execution (best demo)
+### Fix A: Recompile per-execution (best option)
 
+* Create a procedure with recompile
 ```sql
 CREATE OR ALTER PROC dbo.GetDetailsByProduct_Recompile
     @ProductID int
@@ -112,11 +113,16 @@ BEGIN
     OPTION (RECOMPILE);  -- compile for the current parameter each time
 END
 GO
-
--- Try again (compare IO/Time vs Step 4)
-EXEC dbo.GetDetailsByProduct_Recompile @ProductID = @Rare;
-EXEC dbo.GetDetailsByProduct_Recompile @ProductID = @Common;
 ```
+Now repeat the test from step 4, using the same values 
+
+```sql
+-- Try again 
+EXEC dbo.GetDetailsByProduct_Recompile @ProductID = 897;--Insert the rare product id from step 2 above
+EXEC dbo.GetDetailsByProduct_Recompile @ProductID = 870;--Insert the common product id from step 2 above
+```
+
+Compare the execution time with the execution time in step 3
 
 ### Fix B: Compile for “typical” (ignore sniffed value)
 
