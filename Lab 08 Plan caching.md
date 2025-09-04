@@ -1,16 +1,21 @@
 # Exercise 1: Parameter sniffing 
 ## Step 1: Setup
 
+* Start SQL Server Management Studio
+* Connect to the Server North 
+* Open a query window
+* Enable Actual Execution Plan (Ctrl+M in SSMS)
+*  reset plan cache — **not for production**
+
+```sql
+DBCC FREEPROCCACHE; -- not for production
+DBCC DROPCLEANBUFFERS;-- not for production
+USE AdventureWorks;
+GO
+```
 
 
 ```sql
---clear caches — **not for production**
-DBCC FREEPROCCACHE;  -- not for production
-DBCC DROPCLEANBUFFERS;  -- not for production
-
-USE AdventureWorks;
-GO
-
 -- Create an index ON ProductID WITHOUT INCLUDEs to force Key Lookups
 IF NOT EXISTS (
     SELECT 1
