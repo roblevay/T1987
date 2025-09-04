@@ -1,5 +1,4 @@
-# Exercise: Parameter sniffing (simple and guaranteed)
-
+# Exercise 1: Parameter sniffing 
 ## Step 1: Setup
 
 
