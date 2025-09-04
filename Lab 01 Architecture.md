@@ -168,5 +168,7 @@ ORDER BY wait_duration_ms DESC--All processes,
 
 ---
 
+### Tip!
 
+*Edit the queries to MAXDOP 1 instead of MAXDOP 8. There will be no CXPACKET!*
 
