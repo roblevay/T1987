@@ -117,12 +117,18 @@ GO
 Now repeat the test from step 4, using the same values 
 
 ```sql
--- Try again 
+-- Try again
+SET STATISTICS IO ON;
+SET STATISTICS TIME ON;
+
 EXEC dbo.GetDetailsByProduct_Recompile @ProductID = 897;--Insert the rare product id from step 2 above
 EXEC dbo.GetDetailsByProduct_Recompile @ProductID = 870;--Insert the common product id from step 2 above
+
+SET STATISTICS IO ON;
+SET STATISTICS TIME ON;
 ```
 
-Compare the execution time with the execution time in step 3
+Compare the execution plan and the execution time with the execution time in step 3 for the common value
 
 ### Fix B: Compile for “typical” (ignore sniffed value)
 
