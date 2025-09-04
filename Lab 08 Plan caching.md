@@ -236,12 +236,15 @@ GO
 
 ```sql
 DBCC FREEPROCCACHE;  -- demo only
-EXEC dbo.GetDetailsByProduct_QS @ProductID = @Rare;   -- plan A (few rows)
+
+EXEC dbo.GetDetailsByProduct_QS @ProductID = 897 --Or whatever the product id for rare in step 2
+
 EXEC sp_recompile 'dbo.GetDetailsByProduct_QS';       -- force new compile next time
-EXEC dbo.GetDetailsByProduct_QS @ProductID = @Common; -- plan B (many rows)
+
+EXEC dbo.GetDetailsByProduct_QS @ProductID =897  --Or whatever the product id for common in step 2
 ```
 
-*Query Store now has **two plans** for the same query.*
+*Query Store now has **two plans** for the same query. You may verify that using **Actual Eexecution Plan***
 
 ---
 
