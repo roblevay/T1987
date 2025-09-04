@@ -132,6 +132,7 @@ Compare the execution plan and the execution time with the execution time in ste
 
 ### Fix B: Compile for “typical” (ignore sniffed value)
 
+Now, use the same method below
 ```sql
 CREATE OR ALTER PROC dbo.GetDetailsByProduct_Unknown
     @ProductID int
@@ -146,8 +147,8 @@ BEGIN
 END
 GO
 
-EXEC dbo.GetDetailsByProduct_Unknown @ProductID = @Rare;
-EXEC dbo.GetDetailsByProduct_Unknown @ProductID = @Common;
+EXEC dbo.GetDetailsByProduct_Unknown @ProductID = 897;--Insert the rare product id from step 2 above
+EXEC dbo.GetDetailsByProduct_Unknown @ProductID = --Insert the common product id from step 2 above
 ```
 
 *Observation:*
