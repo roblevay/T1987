@@ -144,3 +144,29 @@ ORDER BY wait_duration_ms DESC--All processes,
 ```
 - You should be able to find CXPACKET waits. If not, run the queries again. Query1 and Query2 should take around 30 seconds to run, be sure to run Query 3 before too much time has passed!
 - Close all windows
+
+
+
+### Why **CXPACKET**?
+
+* You forced parallelism (`MAXDOP 8` + trace flag 8649).
+* The work is split across multiple threads (“distribute streams”).
+* Threads that finish earlier must **wait for slower ones** before results are synchronized.
+* That waiting shows up as **CXPACKET** (a symptom of parallelism, not always a problem).
+
+### Why **ASYNC\_NETWORK\_IO**?
+
+* Your query produces a **huge result set** (1.5 million rows × a 400-character string).
+* SQL Server pushes this out to the client.
+* If the client (e.g., SSMS) cannot read the network buffer as fast as SQL Server produces rows, SQL Server has to wait → **ASYNC\_NETWORK\_IO**.
+* Very common when selecting *tons of rows*, especially with wide columns.
+
+### Conclusion
+
+* **CXPACKET**: caused by the parallelism you explicitly forced.
+* **ASYNC\_NETWORK\_IO**: caused by returning a massive amount of data to the client.
+
+---
+
+
+
