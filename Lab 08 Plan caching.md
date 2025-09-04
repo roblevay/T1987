@@ -191,8 +191,9 @@ ALTER DATABASE AdventureWorks SET QUERY_STORE (OPERATION_MODE = READ_WRITE);
 
 ## Step 2: Create a parameter-sensitive proc
 
+*  Create a small index to enable alternative plans
+* 
 ```sql
--- Optional (small index to enable alternative plans)
 IF NOT EXISTS (
   SELECT 1 FROM sys.indexes 
   WHERE object_id = OBJECT_ID('Sales.SalesOrderDetail')
@@ -200,14 +201,25 @@ IF NOT EXISTS (
 )
 CREATE INDEX IX_Training_SOD_ProductID
 ON Sales.SalesOrderDetail(ProductID);
+```
 
+* Find a rare and a common  product id in the Sales.SalesOrderDetail table
+
+```sql
 -- Find a common and a rare ProductID
-DECLARE @Common int, @Rare int;
-SELECT TOP (1) @Common = ProductID
-FROM Sales.SalesOrderDetail GROUP BY ProductID ORDER BY COUNT(*) DESC;
-SELECT TOP (1) @Rare = ProductID
-FROM Sales.SalesOrderDetail GROUP BY ProductID ORDER BY COUNT(*) ASC;
+
+SELECT Common=(SELECT TOP 1 ProductID
+FROM Sales.SalesOrderDetail GROUP BY ProductID ORDER BY COUNT(*) DESC)--870 in my test
+
+SELECT Rare=(SELECT TOP 1 ProductID
+FROM Sales.SalesOrderDetail GROUP BY ProductID ORDER BY COUNT(*) ASC)--897 in my test
 GO
+```
+
+* Make a not of these productids
+* Create a procedure for test
+
+```sql
 CREATE OR ALTER PROC dbo.GetDetailsByProduct_QS @ProductID int AS
 BEGIN
   SET NOCOUNT ON;
