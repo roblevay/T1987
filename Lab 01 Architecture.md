@@ -23,32 +23,32 @@ Go to:
 - Click on the **Processors** tab
 - Verify that the number of nodes and processors are the same as observed in step 2 above
 - Deselect the **Automatically set processor affinity mask for all processors
-- Check the check box for **Processsor Affinity** for **CPU0**
+- Check the check box for **Processsor Affinity** for **CPU0** and deselect the check box for CPU1 and others if there are others
 - Select **Script** and then **Script Action to New Query Window**
 - The script should be the following
 ```sql
 ALTER SERVER CONFIGURATION SET PROCESS AFFINITY CPU = 0
 GO
 ```
--Close the Query Window
+-Click **Cancel**. We do not want to change this setting Close the Query Window
 
 **Step 4: Cost threshold for parallellism**
 
 - In Management Studio, connect to your default instance (`North`).
 - Right-click on your instance name in Object Explorer and select **Properties**.
 - Click on the **Advanced** tab
-- Change the value of **Cost threshold for parallellism** to 2,meaning that many queries will be run in  parallell
+- Change the value of **Cost threshold for parallellism** to 2,meaning that many queries will be run in  parallell since the threshold value is so low. Click **OK**
 - From the **Query** meny, select **Include Actual Execution Plan**
 - Run the following query
 ```sql
 SELECT *
-FROM Sales.SalesOrderDetail
+FROM AdventureWorks.Sales.SalesOrderDetail
 ORDER BY UnitPrice DESC
 GO
 ```
 
 - Look at the **Execution Plan**. It should contain parallelism since the cost for the query is around 8
-- Change the value of **Cost threshold for parallellism** to **100**,meaning that almost all queries will be run in  parallell and run the query again. This time there will be nor parallellism
+- Change the value of **Cost threshold for parallellism** to **100**,meaning that almost all queries will be run in  parallell and run the query above again. This time there will be nor parallellism
 - To see the cost of a serial execution, run the following query:
 - 
 ```sql
@@ -59,6 +59,7 @@ OPTION (MAXDOP 1, RECOMPILE);
 GO
 ```
 - Note that the cost is higher with serical execution. The option RECOMPILE is used to avoid using the old query plan
+- Change the **Cost threshold for parallellism** back to 5
 
 
 ### Exercise 2: Waiting stats
@@ -93,12 +94,15 @@ SELECT * FROM tempdb.dbo.WaitLab WITH (INDEX(1)) WHERE id = 500; -- behöver S, 
 SELECT wt.session_id, wt.blocking_session_id, wt.wait_type, wt.wait_duration_ms   
 FROM sys.dm_os_waiting_tasks AS wt
 JOIN sys.dm_exec_sessions AS s ON s.session_id = wt.session_id AND s.is_user_process = 1--Only user processes
+```
+- Note that in this query, with only user processes, the wait types should be **WAITFOR** as in Query 1 and in the query and **LCK_M_S** as a lock in Query 2
 
+```sql
 SELECT * FROM sys.dm_os_waiting_tasks
 ORDER BY wait_duration_ms DESC--All processes, 
 ```
-- Note that in the first query, with only user processes, the wait types should be **WAITFOR** as in the query and **LCK_M_S**. In the second query, around 10-15 bacground queries appear above the lock. That is normal.
-- Close the query windows
+ In the second query, around 10-15 background queries appear above the lock **LCK_M_S**. That is normal.The bakground processes are not important
+- Close all query windows
 
 **Step 1: CXPACKET och CXCONSUMER**
 - From Configuration Manager, restart your server and connect to your server in Management Studio
