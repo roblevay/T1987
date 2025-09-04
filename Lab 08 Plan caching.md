@@ -241,7 +241,7 @@ EXEC dbo.GetDetailsByProduct_QS @ProductID = 897 --Or whatever the product id fo
 
 EXEC sp_recompile 'dbo.GetDetailsByProduct_QS';       -- force new compile next time
 
-EXEC dbo.GetDetailsByProduct_QS @ProductID =897  --Or whatever the product id for common in step 2
+EXEC dbo.GetDetailsByProduct_QS @ProductID =870  --Or whatever the product id for common in step 2
 ```
 
 *Query Store now has **two plans** for the same query. You may verify that using **Actual Eexecution Plan***
@@ -271,32 +271,24 @@ ORDER BY avg_duration_ms DESC;
 
 ## Step 5: Force the better plan
 
-```sql
--- Pick the plan with the lowest avg_duration and force it
-DECLARE @qid bigint, @best_plan bigint;
-WITH Plans AS (
-  SELECT qsq.query_id, qsp.plan_id,
-         MIN(rs.avg_duration) OVER (PARTITION BY qsq.query_id) AS best_dur
-  FROM sys.query_store_query AS qsq
-  JOIN sys.query_store_plan  AS qsp ON qsq.query_id = qsp.query_id
-  JOIN sys.query_store_runtime_stats AS rs ON qsp.plan_id = rs.plan_id
-  WHERE qsq.object_id = OBJECT_ID('dbo.GetDetailsByProduct_QS')
-)
-SELECT TOP(1) @qid = query_id, @best_plan = plan_id
-FROM Plans
-ORDER BY best_dur;
+* Make note of the query id above
+* In **Object Explorer**, expand **Adventureworks** and expand **Query Store**
+* Under **Query Store**, double-click **Top Resource Consuming Queries**
+* In the left window, select the query with the query id identified in step 4 above
+* In the plan summary window, select the plan id with the lowest execution time and click **Force Plan**. Click **Yes to accept**
+* 
 
-EXEC sp_query_store_force_plan @query_id = @qid, @plan_id = @best_plan;
-```
+
+
 
 **Test the effect (both calls should now use the forced plan):**
 
 ```sql
-EXEC dbo.GetDetailsByProduct_QS @ProductID = @Rare;
-EXEC dbo.GetDetailsByProduct_QS @ProductID = @Common;
+EXEC dbo.GetDetailsByProduct_QS @ProductID = 897 --Or whatever the product id for rare in step 2
+EXEC dbo.GetDetailsByProduct_QS @ProductID =870  --Or whatever the product id for common in step 2
 ```
 
-*(In the Actual Plan, check **QueryStoreUsedPlan = True** and that **plan\_id** matches the forced one.)*
+* In the Actual Execution Plan, check that the same plan is used for both
 
 ---
 
@@ -317,6 +309,6 @@ EXEC sp_query_store_unforce_plan @query_id = <query_id>, @plan_id = <plan_id>;
 -- ALTER DATABASE AdventureWorks SET QUERY_STORE = OFF;
 ```
 
-**What students learn:** Query Store captures multiple plans for the same query, lets you **compare** them with real runtime stats, and **force** a stable/desired plan when needed.
+
 
 
