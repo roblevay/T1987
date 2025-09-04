@@ -128,7 +128,7 @@ SET STATISTICS IO ON;
 SET STATISTICS TIME ON;
 ```
 
-Compare the execution plan and the execution time with the execution time in step 3 for the common value
+Compare the execution plan and the execution time with the execution time in step 3 for the common value. Now, a clustered index scan should be used and the execution time should be shorter.
 
 ### Fix B: Compile for “typical” (ignore sniffed value)
 
