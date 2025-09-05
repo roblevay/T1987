@@ -158,6 +158,11 @@ To switch back:
 ALTER DATABASE DemoFilegroupDB MODIFY FILEGROUP [PRIMARY] DEFAULT;
 ```
 
+
+# Exercise 2: (optional) Database utilities
+
+[sp_dbinfo](https://karaszi.com/spdbinfo-database-space-usage-information)
+
 ---
 
 
