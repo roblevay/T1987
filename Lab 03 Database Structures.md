@@ -159,9 +159,26 @@ ALTER DATABASE DemoFilegroupDB MODIFY FILEGROUP [PRIMARY] DEFAULT;
 ```
 
 
-# Exercise 2: (optional) Database utilities
+# Exercise 2: (optional) Database utilities from Tibor Karaszi
+
+## Step 1: Install and use sp_dbinfo
+
+- Install sp_dbinfo and get a list of all databases
 
 [sp_dbinfo](https://karaszi.com/spdbinfo-database-space-usage-information)
+
+## Step 1: Install and use sp_dbinfo
+
+- Install sp_tableinfo 
+
+[sp_tableinfo ](https://karaszi.com/spdbinfo-database-space-usage-information](https://karaszi.com/sptableinfo-list-tables-and-space-usage)
+
+- Get a list of all the tables in the Adventureworks database
+
+```sql
+USE Adventureworks
+EXEC sp_tableinfo
+```
 
 ---
 
