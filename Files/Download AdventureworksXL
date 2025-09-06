@@ -1,1 +1,10 @@
 https://files.karaszi.com/rot/courses/AdventureworksDW2016_2019.zip
+
+Install:
+
+```sql
+USE [master]
+RESTORE DATABASE [AdventureworksDW] FROM  DISK = N'C:\Dbfiles\AdventureworksDW2016_2019.bak' 
+WITH  FILE = 1,  NOUNLOAD,  REPLACE,  STATS = 5
+GO
+```
