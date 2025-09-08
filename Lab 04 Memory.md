@@ -72,17 +72,24 @@ FROM sys.dm_os_memory_clerks AS mc
 ORDER BY mc.pages_kb DESC;
 ```
 
-| Clerk                          | Example Pages (KB) | Explanation                                                                          |
-| ------------------------------ | ------------------ | ------------------------------------------------------------------------------------ |
-| **MEMORYCLERK\_SOSNODE**       | 40,776             | Memory used by SQL Server OS (internal scheduler, threads, connections).             |
-| **MEMORYCLERK\_SQLBUFFERPOOL** | 33,816 / 45,272    | The buffer pool – main cache for data and index pages. Usually the largest consumer. |
-| **MEMORYCLERK\_SQLSTORENG**    | 33,392 / 73,984    | Storage engine structures (locks, latches, transaction objects).                     |
-| **CACHESTORE\_PHDR**           | 31,864             | Plan header cache – metadata for query plans.                                        |
-| **MEMORYCLERK\_SQLGENERAL**    | 17,632             | General-purpose allocations by the SQL Server engine.                                |
 
 ---
 
-Awesome — here are the updated steps **3a** and **3b** (simple, repeatable in SQL Server 2019 & 2022), plus the inspection step.
+| Clerk                          | Example Pages (KB) | Explanation                                                                                                                  |
+| ------------------------------ | ------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| **MEMORYCLERK\_XTP**           | 243,344            | Minnesallokeringar för In-Memory OLTP (XTP) – hash-index, tabeller, versioner. Kan bli väldigt stort om du använder Hekaton. |
+| **MEMORYCLERK\_SOSNODE**       | 51,336             | SQL Server OS (SQLOS) interna resurser: schemaläggare, trådar, anslutningar.                                                 |
+| **MEMORYCLERK\_SQLBUFFERPOOL** | 33,408             | Buffer pool – huvudsakliga cachen för data- och indexsidor. Normalt största förbrukaren.                                     |
+| **MEMORYCLERK\_SQLSTORENG**    | 31,728             | Storage engine-strukturer: lås, latches, transaktionsobjekt, metadata.                                                       |
+| **MEMORYCLERK\_SQLGENERAL**    | 9,456              | Allmänna allokeringar av SQL Server-motorn som inte hör till en särskild subsystem.                                          |
+
+---
+
+
+
+---
+
+
 
 ---
 
