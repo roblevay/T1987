@@ -100,8 +100,8 @@ ORDER BY mc.pages_kb DESC;
 * Pick your DW database
 
 ```sql
--- USE AdventureWorksDW2019;
--- USE AdventureWorksDW2022;
+-- USE AdventureWorksDW;
+
 GO
 ```
 - prepare an example table
