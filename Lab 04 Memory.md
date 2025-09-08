@@ -175,7 +175,7 @@ In short: *Request* (estimate), *Grant* (allocation), *Required* (minimum), *Max
 * Clear cache (test only)
 
 ```sql
-USE AdventureworksDW
+USE Adventureworks
 GO
 CHECKPOINT; 
 DBCC DROPCLEANBUFFERS;
