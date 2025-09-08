@@ -145,7 +145,7 @@ JOIN sys.dm_exec_sessions AS s ON s.session_id = wt.session_id AND s.is_user_pro
 SELECT * FROM sys.dm_os_waiting_tasks
 ORDER BY wait_duration_ms DESC--All processes, 
 ```
-- You should be able to find CXPACKET waits. If not, run the queries again. Query1 and Query2 should take around 30 seconds to run, be sure to run Query 3 before too much time has passed!
+- You should be able to find CXPACKET waits in the first query and at a lower position, maybe 20 or 30 in the second query. If not, run the queries again. Query1 and Query2 should take around 30 seconds to run, be sure to run Query 3 before too much time has passed!
 - Close all windows
 
 
