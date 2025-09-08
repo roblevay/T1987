@@ -2,6 +2,7 @@
 
 ## Step 1: Memory configuration
 
+- In Sql Server Configuration Manager, restart the SQL Server Service
 - Start SQL Server Management Studio
 - Connect to the Server North and open a query window
   
