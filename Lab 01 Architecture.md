@@ -104,7 +104,7 @@ JOIN sys.dm_exec_sessions AS s ON s.session_id = wt.session_id AND s.is_user_pro
 SELECT * FROM sys.dm_os_waiting_tasks
 ORDER BY wait_duration_ms DESC--All processes, 
 ```
- In the second query, around 10-15 background queries appear above the lock **LCK_M_S**. That is normal.The bakground processes are not important
+ In the second query, around 10-15 or more background queries appear above the lock **LCK_M_S**. That is normal.The bakground processes are not important
 - Close all query windows
 
 **Step 1: CXPACKET och CXCONSUMER**
