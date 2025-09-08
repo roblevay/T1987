@@ -100,7 +100,7 @@ ORDER BY mc.pages_kb DESC;
 * Pick your DW database
 
 ```sql
--- USE AdventureWorksDW;
+USE AdventureWorksDW;
 
 GO
 ```
