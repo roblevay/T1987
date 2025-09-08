@@ -142,6 +142,8 @@ OPTION (MAXDOP 1);
 
 * Compare memory grant info between 3a and 3b!
 
+* Kort svaret: i 3a kan SQL Server redan producera raderna i ordning utan en Sort-operator (t.ex. via ett index på FactInternetSales(SalesOrderNumber)), därför behövs ingen memory grant. I 3b är #fis en heap (SELECT INTO kopierar inte index), så för ORDER BY SalesOrderNumber måste optimizern lägga in en Sort – och Sort kräver memory grant.
+
 ---
 
 ## Step 4: Explanation of Memory Grant Info
