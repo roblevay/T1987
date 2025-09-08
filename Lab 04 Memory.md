@@ -171,16 +171,11 @@ In short: *Request* (estimate), *Grant* (allocation), *Required* (minimum), *Max
 
 ## Step 5: Observe buffer pool growth (AdventureWorks OLTP)
 
-> Use the OLTP DB name that matches your install and uncomment one line:
->
-> * `USE AdventureWorks2019;`  or
-> * `USE AdventureWorks2022;`
 
 * Clear cache (test only)
 
 ```sql
--- USE AdventureWorks2019;
--- USE AdventureWorks2022;
+USE AdventureworksDW
 GO
 CHECKPOINT; 
 DBCC DROPCLEANBUFFERS;
