@@ -77,9 +77,12 @@ INSERT INTO dbo.WaitLab(id) SELECT TOP (1000) ROW_NUMBER() OVER (ORDER BY (SELEC
 GO
 
 BEGIN TRAN;
-UPDATE dbo.WaitLab SET pad = pad WHERE id = 500;  -- tar X-lås på raden/sidan
-WAITFOR DELAY '00:02:00';  -- håll låset länge, i detta fall 2 minuter
-ROLLBACK;  -- Rulla tillbaka
+UPDATE dbo.WaitLab
+SET pad = CASE WHEN pad = 'x' THEN 'y' ELSE 'x' END
+WHERE id = 500;
+WAITFOR DELAY '00:02:00';
+ROLLBACK;
+
 ```
 
 - Open a new query window in SSMS, Query 2
