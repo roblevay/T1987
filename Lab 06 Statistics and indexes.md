@@ -137,7 +137,7 @@ WHERE BusinessEntityID = 1;
 * Run the query and click on the **Execution Plan** tab
 
 ```sql
-USE AdventureWorks2019;
+USE AdventureWorks;
 GO
 SELECT SalesOrderID, OrderDate, TotalDue
 FROM Sales.SalesOrderHeader
@@ -163,7 +163,7 @@ FROM Sales.SalesOrderHeader
 WHERE CustomerID = 11000
   AND OrderDate >= '2014-01-01';
 ```
-* Check the actual plan—should switch from scan to seek and become “covered”
+* Check the actual plan—should switch from key lookup to seek and become “covered”
 
 ---
 
