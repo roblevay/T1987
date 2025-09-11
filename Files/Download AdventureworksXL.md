@@ -12,7 +12,7 @@ WITH  FILE = 1,  NOUNLOAD,  REPLACE,  STATS = 5
 GO
 ```
 
-Also install AdventureWorks:
+Also install AdventureWorks (finns bland kursfilerna):
 ```sql
 USE [master]
 RESTORE DATABASE [Adventureworks] FROM  DISK = N'C:\Dbfiles\AdventureWorks2016.bak' 
