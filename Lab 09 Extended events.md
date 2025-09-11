@@ -164,7 +164,7 @@ In the Live data window, double-click on the xml report to expand it
 
 ## 📂 Tip: Viewing .xel Files
 
-You can always right-click on a session and choose **View Target Data** or **Open > File...**
+You can always right-click on an event file and choose **View Target Data** 
 
 ---
 
