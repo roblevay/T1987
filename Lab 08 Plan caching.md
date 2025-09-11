@@ -91,7 +91,7 @@ SET STATISTICS IO OFF;
 SET STATISTICS TIME OFF;
 ```
 
-Examine the execution plan. The same execution plan will be used because of parameter sniffing. Make a not of the execution time.
+Examine the execution plan. The same execution plan will be used because of parameter sniffing. Make a note of the execution time.
 
 ---
 
