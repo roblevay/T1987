@@ -46,6 +46,7 @@ FROM AdventureWorks.Sales.SalesOrderDetail
 ORDER BY UnitPrice DESC
 GO
 ```
+-Take a note of the Subtree Cost
 
 - Look at the **Execution Plan**. It should contain parallelism since the cost for the query is around 8
 - Change the value of **Cost threshold for parallellism** to **100**,meaning that almost all queries will be run in  parallell and run the query above again. This time there will be nor parallellism
