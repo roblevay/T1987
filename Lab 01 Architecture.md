@@ -108,9 +108,9 @@ ORDER BY wait_duration_ms DESC--All processes,
  In the second query, around 10-15 or more background queries appear above the lock **LCK_M_S**. That is normal.The bakground processes are not important
 - Close all query windows
 
-- ### Exercise 2: Waiting stats
+### Exercise 2: CXPACKET och CXCONSUMER
 
-**Step 1: CXPACKET och CXCONSUMER**
+
 - From Configuration Manager, restart your server and connect to your server in Management Studio
 - Open a new query window in SSMS, Query 1.
 - Run this query:
