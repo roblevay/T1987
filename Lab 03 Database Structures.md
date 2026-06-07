@@ -163,9 +163,16 @@ ALTER DATABASE DemoFilegroupDB MODIFY FILEGROUP [PRIMARY] DEFAULT;
 
 ## Step 1: Install and use sp_dbinfo
 
-- Install sp_dbinfo and get a list of all databases
+- Install sp_dbinfo 
 
 [sp_dbinfo](https://karaszi.com/spdbinfo-database-space-usage-information)
+
+- Get a list of all the databases
+
+```sql
+USE Adventureworks
+EXEC sp_dbinfo
+```
 
 ## Step 1: Install and use sp_dbinfo
 
