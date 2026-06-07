@@ -2,7 +2,7 @@
 
 **Step 1: Download Diskspd**
 
-- If it not exists, create the folder **C:\Diskspd**
+- If it not exists, create the folder **C:\Diskspd**. Ensure that the folder is empty.
 - Download **Diskspd.exe** from **https://github.com/roblevay/T1987** to the folder **C:\Diskspd**
 
 **Step 2: Run Diskspd**
