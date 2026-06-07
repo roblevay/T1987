@@ -170,7 +170,7 @@ ALTER DATABASE DemoFilegroupDB MODIFY FILEGROUP [PRIMARY] DEFAULT;
 - Get a list of all the databases
 
 ```sql
-USE Adventureworks
+USE master
 EXEC sp_dbinfo
 ```
 
