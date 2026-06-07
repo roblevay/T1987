@@ -171,7 +171,8 @@ ALTER DATABASE DemoFilegroupDB MODIFY FILEGROUP [PRIMARY] DEFAULT;
 
 - Install sp_tableinfo 
 
-[sp_tableinfo ](https://karaszi.com/spdbinfo-database-space-usage-information](https://karaszi.com/sptableinfo-list-tables-and-space-usage)
+[sp_tableinfo](https://karaszi.com/sptableinfo-list-tables-and-space-usage)
+
 
 - Get a list of all the tables in the Adventureworks database
 
