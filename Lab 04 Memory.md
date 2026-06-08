@@ -21,6 +21,13 @@ EXEC sp_configure 'max server memory (MB)', 1024;--Default is 2147483647
 RECONFIGURE;
 ```
 
+* Set back memory usage to normal
+
+```sql
+EXEC sp_configure 'max server memory (MB)', 2147483647;--Default is 2147483647
+RECONFIGURE;
+```
+
 * Empty data and procedure cache (not for production!)
 
 ```sql
