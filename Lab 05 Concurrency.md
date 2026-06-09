@@ -144,7 +144,6 @@ UPDATE DeadlockTest SET Value = 'B1' WHERE ID = 2;
 
 ### 🪩 Session A
 ```sql
-WAITFOR DELAY '00:00:10';
 UPDATE DeadlockTest SET Value = 'A2' WHERE ID = 2;
 ```
 
@@ -155,7 +154,6 @@ UPDATE DeadlockTest SET Value = 'A2' WHERE ID = 2;
 ```sql
 --then this
 USE Tempdb
-BEGIN TRAN;
 UPDATE DeadlockTest SET Value = 'B1' WHERE ID = 1;
 ```
 
