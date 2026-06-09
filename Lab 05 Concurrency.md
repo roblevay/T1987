@@ -86,4 +86,94 @@ ROLLBACK TRAN
 * Now, the blocking lock is released and the value in Person.Person is returned to the original value
 * Close all open query windows
 
+  ## 🧪 Exercise 2: Capture Deadlocks
+
+### 🎯 Goal:
+
+Log only actual deadlocks.
+
+### 🛠️ Steps:
+
+1. Create new session: `Deadlocks`
+2. Add event: `xml_deadlock_report`
+3. No filter needed.
+4. Add the fields  `database_name`, `sql_text`
+5. Add `event_file`, e.g. `C:\XELogs\Deadlocks.xel`
+6. Save and start session.
+7. Right-click the session and select Watch Live Data
+
+
+### 🧪 Test the session: Simulate a Deadlock
+
+#### 1. Create test table
+```sql
+USE tempdb
+DROP TABLE IF EXISTS DeadlockTest;
+CREATE TABLE DeadlockTest (
+    ID INT PRIMARY KEY,
+    Value VARCHAR(100)
+);
+
+INSERT INTO DeadlockTest (ID, Value)
+VALUES (1, 'First'), (2, 'Second');
+````
+
+#### 2. Open **two separate SSMS query windows** — Session A and Session B. Run both queries within 10 seconds
+
+---
+
+### 🪩 Session A
+
+```sql
+--Run this first
+USE Tempdb
+BEGIN TRAN;
+UPDATE DeadlockTest SET Value = 'A1' WHERE ID = 1;
+-- Wait here to simulate overlap
+WAITFOR DELAY '00:00:10';
+UPDATE DeadlockTest SET Value = 'A2' WHERE ID = 2;
+COMMIT;
+```
+
+---
+
+### 🪩 Session B
+
+```sql
+--then this
+USE Tempdb
+BEGIN TRAN;
+UPDATE DeadlockTest SET Value = 'B1' WHERE ID = 2;
+-- Wait to collide with A
+WAITFOR DELAY '00:00:10';
+UPDATE DeadlockTest SET Value = 'B2' WHERE ID = 1;
+COMMIT;
+```
+
+---
+
+### ✅ Result
+
+One of the sessions will be chosen as the deadlock victim and get an error:
+
+```
+Transaction (Process ID xx) was deadlocked on resources with another process and has been chosen as the deadlock victim.
+```
+
+You can catch this using the `xml_deadlock_report` Extended Event.
+
+In the Live data window, double-click on the xml report to expand it
+
+
+
+
+---
+
+## 📂 Tip: Viewing .xel Files
+
+You can always right-click on a session and choose **View Target Data** or **Open > File...**
+
+---
+
+
 
