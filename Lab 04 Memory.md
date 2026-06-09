@@ -21,7 +21,7 @@ EXEC sp_configure 'max server memory (MB)', 1024;--Default is 2147483647
 RECONFIGURE;
 ```
 
-* Set back memory usage to normal
+* Set back memory usage to normal (after the Exercise)
 
 ```sql
 EXEC sp_configure 'max server memory (MB)', 2147483647;--Default is 2147483647
