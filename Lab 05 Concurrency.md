@@ -130,9 +130,22 @@ USE Tempdb
 BEGIN TRAN;
 UPDATE DeadlockTest SET Value = 'A1' WHERE ID = 1;
 -- Wait here to simulate overlap
+```
+
+### 🪩 Session B
+
+```sql
+--then this
+USE Tempdb
+BEGIN TRAN;
+UPDATE DeadlockTest SET Value = 'B1' WHERE ID = 2;
+-- Wait to collide with A
+```
+
+### 🪩 Session A
+```sql
 WAITFOR DELAY '00:00:10';
 UPDATE DeadlockTest SET Value = 'A2' WHERE ID = 2;
-COMMIT;
 ```
 
 ---
@@ -144,11 +157,9 @@ COMMIT;
 USE Tempdb
 BEGIN TRAN;
 UPDATE DeadlockTest SET Value = 'B1' WHERE ID = 2;
--- Wait to collide with A
-WAITFOR DELAY '00:00:10';
-UPDATE DeadlockTest SET Value = 'B2' WHERE ID = 1;
-COMMIT;
 ```
+
+
 
 ---
 
