@@ -41,7 +41,7 @@ If the folder C:\XELogs does not exist, create it!
 ### ✅ Verification:
 
 1. Right-click the session > **Watch Live Data**.
-2. Run:
+2. Open a query window and run:
 
    ```sql
    WAITFOR DELAY '00:00:06';
